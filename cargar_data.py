@@ -12,7 +12,6 @@ def cargar_clientes():
         {'Nombre': 'Lucia Marchesano', 'Contraseña': 'buonabitacolo31', 'Telefono': '011 4214-7576', 'Direccion': 'Erezcano 1576, Adrogue, Buenos aires', 'Posicion': (-34.802668, -58.375369), 'Rappicreditos': None},
         {'Nombre': 'Ana Maria Gasparutti', 'Contraseña': 'nuncioyana2019', 'Telefono': '011 4214-7576', 'Direccion': 'Av. Espora 200, Adrogué, Buenos aires', 'Posicion': (-34.788542, -58.389000), 'Rappicreditos': None},
         {'Nombre': 'Tero Martignetti', 'Contraseña': 'onlyfood17', 'Telefono': '011 4293-6406', 'Direccion': 'King 725, José Mármol, Buenos aires', 'Posicion': (-34.789540, -58.373989), 'Rappicreditos': None},
-        # {'Nombre': 'Paola Rivera', 'Contraseña': '500elkilo', 'Telefono': '011 4294-1234', 'Direccion': 'Spiro 1075, Adrogue, Buenos aires', 'Posicion': (-34.799055, -58.391754), 'Rappicreditos': None},
         {'Nombre': 'Raul Garcia', 'Contraseña': 'radiopasion1929', 'Telefono': '011 4293-1833', 'Direccion': 'Benigno Macias 443, Adrogue, Buenos aires', 'Posicion': (-34.797054, -58.391627), 'Rappicreditos': None},
         {'Nombre': 'Hortencia Cisterna', 'Contraseña': 'lamuniloca', 'Telefono': '011 4294-3936', 'Direccion': 'Cerretti 876, Adrogue, Buenos aires', 'Posicion': (-34.799099, -58.386906), 'Rappicreditos': None}
         ]
@@ -28,9 +27,6 @@ def cargar_rappitenderos():
     ]
     return rappitenderos
 
-restaurantes = cargar_restaurantes()
-clientes = cargar_clientes()
-rappitenderos = cargar_rappitenderos()
 
 # print(len(restaurantes), restaurantes)
 # def cargar_data_predefinida():

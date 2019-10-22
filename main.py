@@ -41,23 +41,45 @@
 # ○ Rappicréditos: flotante.
 import cargar_data
 
+print("\t\tBienvenido a Rappi.\n")
 def menu():
-    print(
+  def pedir_numero_entero():
+    correcto = False
+    num = 0
+    while(not correcto):
+      try:
+        num = int(input("Introduce un numero entero referido a las opciones del menu: "))
+        correcto = True
+      except ValueError:
+        print('Error, la opcion ingresada no es un numero entero.')
+    return num
 
+  salir = False
+  opcion = 0
 
+  while not salir:
 
+    print("\n\t 1 - Carga de informacion predefinida.\n\t 2 - Carga de informacion manual.\n\t 3 - Pedido manual.\n\t 4 - Simulacion de pedidos.\n\t 5 - Informes.\n\t 6 - Salir.\n\n")
 
-    )
-    print("\t\tBienvenido a Rappi.\n Seleccione la opcion con la que desea operar:")
+    opcion = pedir_numero_entero()
+
+    if opcion == 1:
+      restaurantes = cargar_restaurantes()
+      clientes = cargar_clientes()
+      rappitenderos = cargar_rappitenderos()
+    elif opcion == 2:
+        print ("Opcion 2")
+    elif opcion == 3:
+        print("Opcion 3")
+    elif opcion == 4:
+        print("Opcion 4")
+    elif opcion == 5:
+        print("Opcion 5")
+    elif opcion == 6:
+        salir = True
+    else:
+        print ("Error. La opcion ingresada no se encuentra en el menu.")
+
+  print ("Fin")
 
 menu()
-# def cargar_data_predefinida():
-
-
-    # clientes = cargar_clientes()
-    # rappitenderos = cargar_rappitenderos()
-
-    # return restaurantes
-    # , clientes, rappitenderos
-
-# print(cargar_data_predefinida())
