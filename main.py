@@ -51,7 +51,7 @@ def menu():
         num = int(input("Introduce un numero entero referido a las opciones del menu: "))
         correcto = True
       except ValueError:
-        print('Error, la opcion ingresada no es un numero entero.')
+        print('Error. La opcion ingresada no es un numero entero.')
     return num
 
   salir = False
@@ -63,23 +63,23 @@ def menu():
 
     opcion = pedir_numero_entero()
 
-    if opcion == 1:
+    if (opcion == 1):
       restaurantes = cargar_restaurantes()
       clientes = cargar_clientes()
       rappitenderos = cargar_rappitenderos()
-    elif opcion == 2:
+    elif (opcion == 2):
         print ("Opcion 2")
-    elif opcion == 3:
+    elif (opcion == 3):
         print("Opcion 3")
-    elif opcion == 4:
+    elif (opcion == 4):
         print("Opcion 4")
-    elif opcion == 5:
+    elif (opcion == 5):
         print("Opcion 5")
-    elif opcion == 6:
+    elif (opcion == 6):
         salir = True
     else:
-        print ("Error. La opcion ingresada no se encuentra en el menu.")
+        print("Error. La opcion ingresada no se encuentra en el menu.")
 
-  print ("Fin")
+  print("Adios.")
 
 menu()
