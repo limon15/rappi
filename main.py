@@ -64,9 +64,16 @@ def menu():
     opcion = pedir_numero_entero()
 
     if (opcion == 1):
-      restaurantes = cargar_restaurantes()
-      clientes = cargar_clientes()
-      rappitenderos = cargar_rappitenderos()
+      restaurantes = cargar_data.cargar_restaurantes()
+      clientes = cargar_data.cargar_clientes()
+      rappitenderos = cargar_data.cargar_rappitenderos()
+      nombres_restaurantes = [dic['Nombre'] for dic in restaurantes]
+      nombres_clientes = [dic['Nombre'] for dic in clientes]
+      nombres_rappitenderos = [dic['Nombre'] for dic in rappitenderos]             
+      print("Se cargaron {0} restaurantes:".format(len(nombres_restaurantes)), *[i for i in nombres_restaurantes], sep="\n\t")
+      print("Se cargaron {0} clientes:".format(len(nombres_clientes)), *[i for i in nombres_clientes], sep="\n\t")
+      print("Se cargaron {0} rappitenderos:".format(len(nombres_rappitenderos)), *[i for i in nombres_rappitenderos], sep="\n\t")
+    #   index, value in enumerate(test_list)  
     elif (opcion == 2):
         print ("Opcion 2")
     elif (opcion == 3):

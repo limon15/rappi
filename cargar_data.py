@@ -21,7 +21,7 @@ def cargar_rappitenderos():
     rappitenderos = [
         {'Nombre': 'Luciana Arcoiris', 'Propina acumulada': None, 'Posicion actual': (-34.789540, -58.373989), 'Pedido actual': None},
         {'Nombre': 'Jonathan Morel', 'Propina acumulada': None, 'Posicion actual': (-34.797054, -58.391627), 'Pedido actual': None},
-        {'Nombre': 'Aurelio Oliveri', 'Propina acumulada': None, 'Posicion actual': (-34.799099, -58.386906), 'Pedido actual': None},
+        {'Nombre': 'Aureliano Oliva', 'Propina acumulada': None, 'Posicion actual': (-34.799099, -58.386906), 'Pedido actual': None},
         {'Nombre': 'Atenea Anti', 'Propina acumulada': None, 'Posicion actual': (-34.788542, -58.389000), 'Pedido actual': None},
         {'Nombre': 'Morfi Mochuelo', 'Propina acumulada': None, 'Posicion actual': (-34.802668, -58.375369), 'Pedido actual': None}
     ]
