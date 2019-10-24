@@ -27,7 +27,18 @@ def cargar_rappitenderos():
     ]
     return rappitenderos
 
-
+def cargar_nuevo_restaurante(lista_restaurantes):
+    nombres_restaurantes = [dic['Nombre'] for dic in lista_restaurantes]
+    nombre = ''
+    while not (nombre not in nombres_restaurantes and 5<len(nombre)<25):
+        nombre = input("Ingrese el nombre del restaurante a cargar: ")
+    direccion = input("Ingrese la direccion: ") 
+    telefono = input("Ingrese el telefono: ")    
+    latitud = float(input("Ingrese la latitud: "))
+    longitud = float(input("Ingrese la longitud: "))
+    posicion = (latitud, longitud)
+    radio_entrega = float(input("Ingrese el radio de entrega (km): "))              
+    lista_restaurantes.append({'Nombre':nombre}) 
 # print(len(restaurantes), restaurantes)
 # def cargar_data_predefinida():
 
