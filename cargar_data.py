@@ -29,16 +29,36 @@ def cargar_rappitenderos():
 
 def cargar_nuevo_restaurante(lista_restaurantes):
     nombres_restaurantes = [dic['Nombre'] for dic in lista_restaurantes]
-    nombre = ''
+    nombre, direccion, telefono, latitud, longitud, radio_entrega, platos = ''
     while not (nombre not in nombres_restaurantes and 5<len(nombre)<25):
-        nombre = input("Ingrese el nombre del restaurante a cargar: ")
+        nombre = input("Ingrese el nombre del restaurante a cargar: "),
+    while not (nombre not in nombres_restaurantes and 5<len(nombre)<25):
+        nombre = input("Ingrese el nombre del restaurante a cargar: ")    
     direccion = input("Ingrese la direccion: ") 
     telefono = input("Ingrese el telefono: ")    
     latitud = float(input("Ingrese la latitud: "))
     longitud = float(input("Ingrese la longitud: "))
     posicion = (latitud, longitud)
-    radio_entrega = float(input("Ingrese el radio de entrega (km): "))              
+    radio_entrega = float(input("Ingrese el radio de entrega (km): "))
+    platos = cargar_nuevo_plato()                 
     lista_restaurantes.append({'Nombre':nombre}) 
+
+def cargar_nuevo_plato():
+    platos = []
+    nombre = input("Ingrese nombre de un plato o aprete * para volver atras: ")
+    while nombre!='*':
+        # while nombre not in dic['nombre'] for dic in platos:
+        if (nombre not in [dic['nombre'] for dic in platos] and 5<len(nombre)<25):
+            precio = input("Ingrese el precio del plato '{}': ".format(nombre))
+            if not (precio.isnumeric()):
+                precio = input("Ingrese un valor numerico para el precio de '{}': ".format(nombre))
+            platos.append({'nombre': nombre, 'precio': precio})
+        else :
+            print("El nombre del plato coincide con un plato existente o tiene una longitud indebida. Intente nuevamente.")
+        nombre = input("Ingrese el nombre de un plato o aprete * para volver atras: ")
+    # print(platos)   
+    return platos
+
 # print(len(restaurantes), restaurantes)
 # def cargar_data_predefinida():
 
