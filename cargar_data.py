@@ -78,6 +78,7 @@ def cargar_nuevo_plato():
     return platos  
 
 # cargar_nuevo_plato()
+
 # print(len(restaurantes), restaurantes)
 # def cargar_data_predefinida():
 
