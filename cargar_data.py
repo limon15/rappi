@@ -1,3 +1,6 @@
+import re
+import common
+
 def cargar_restaurantes():
     restaurantes = [
         {'Nombre': 'Maria Bonita', 'Direccion': 'Mitre 1195, Adrogue, Buenos Aires', 'Telefono': '011 4294-1184', 'Posicion': (-34.797054, -58.391627), 'Radio de entrega': 2.5, 'Platos': [{'Nombre': 'Ensalada Ninetta', 'Precio': 250},{'Nombre': 'Rissotto ai funghi', 'Precio': 370}, {'Nombre': 'Brotola a los 4 quesos', 'Precio': 570}], 'Total de ventas': None, 'Moneda': 'ARG'},
@@ -27,38 +30,54 @@ def cargar_rappitenderos():
     ]
     return rappitenderos
 
-def cargar_nuevo_restaurante(lista_restaurantes):
-    nombres_restaurantes = [dic['Nombre'] for dic in lista_restaurantes]
-    nombre, direccion, telefono, latitud, longitud, radio_entrega, platos = ''
-    while not (nombre not in nombres_restaurantes and 5<len(nombre)<25):
-        nombre = input("Ingrese el nombre del restaurante a cargar: "),
-    while not (nombre not in nombres_restaurantes and 5<len(nombre)<25):
-        nombre = input("Ingrese el nombre del restaurante a cargar: ")    
-    direccion = input("Ingrese la direccion: ") 
-    telefono = input("Ingrese el telefono: ")    
-    latitud = float(input("Ingrese la latitud: "))
-    longitud = float(input("Ingrese la longitud: "))
-    posicion = (latitud, longitud)
-    radio_entrega = float(input("Ingrese el radio de entrega (km): "))
-    platos = cargar_nuevo_plato()                 
-    lista_restaurantes.append({'Nombre':nombre}) 
+# def cargar_nuevo_restaurante(lista_restaurantes=[]):
+#     # platos = []
+#     nombre = input("Ingrese nombre de un plato o aprete * para volver atras: ")
+#     while nombre!='*':
+#         if (nombre not in [dic['nombre'] for dic in lista_restaurantes] and 5<len(nombre)<25):
+#             precio = input("Ingrese el precio del plato '{}': ".format(nombre))
+#             while not (precio.isnumeric()):
+#                 precio = input("El valor ingresado para el precio no es un numero. Ingrese un valor numerico para el precio de '{}': ".format(nombre))
+
+#             direccion = input("Ingrese la direccion: ") 
+#             platos.append({'nombre': nombre, 'precio': precio})
+#         else :
+#             print("El nombre del plato coincide con un plato existente o tiene una longitud indebida. Intente nuevamente.")
+
+#         nombre = input("Ingrese el nombre de un plato o aprete * para volver atras: ")
+
+#     # nombres_restaurantes = [dic['Nombre'] for dic in lista_restaurantes]
+#     # nombre, direccion, telefono, latitud, longitud, radio_entrega, platos = ''
+#     while not (nombre not in nombres_restaurantes and 5<len(nombre)<25):
+#         nombre = input("Ingrese el nombre del restaurante a cargar: "),
+#     while not (nombre not in nombres_restaurantes and 5<len(nombre)<25):
+#         nombre = input("Ingrese el nombre del restaurante a cargar: ")    
+#     direccion = input("Ingrese la direccion: ") 
+#     telefono = input("Ingrese el telefono: ")    
+#     latitud = float(input("Ingrese la latitud: "))
+#     longitud = float(input("Ingrese la longitud: "))
+#     posicion = (latitud, longitud)
+#     radio_entrega = float(input("Ingrese el radio de entrega (km): "))
+#     platos = cargar_nuevo_plato()                 
+#     lista_restaurantes.append({'Nombre':nombre}) 
 
 def cargar_nuevo_plato():
     platos = []
-    nombre = input("Ingrese nombre de un plato o aprete * para volver atras: ")
+    nombre = input(common.msg_nombre)
     while nombre!='*':
-        # while nombre not in dic['nombre'] for dic in platos:
-        if (nombre not in [dic['nombre'] for dic in platos] and 5<len(nombre)<25):
-            precio = input("Ingrese el precio del plato '{}': ".format(nombre))
-            if not (precio.isnumeric()):
-                precio = input("Ingrese un valor numerico para el precio de '{}': ".format(nombre))
-            platos.append({'nombre': nombre, 'precio': precio})
+        if (nombre not in [dic['Nombre'] for dic in platos] and 5<len(nombre)<25) and not bool(re.match('[^A-Za-z0-9]+', nombre)):
+            precio = input(common.msg_precio)
+            while not bool(re.match('^\d{1,4}$', precio)):
+                common.alertar_error("precio", "\n a) No es un numero positivo. \n b) Tiene caracteres incorrectos para el indicio de decimal, utilice '.'. \n c) No se encuentra entre 1 y 9999.")           
+                precio = input(common.msg_precio)
+            precio = round(float(precio),2)
+            platos.append({'Nombre': nombre, 'Precio': precio})
         else :
-            print("El nombre del plato coincide con un plato existente o tiene una longitud indebida. Intente nuevamente.")
-        nombre = input("Ingrese el nombre de un plato o aprete * para volver atras: ")
-    # print(platos)   
-    return platos
+            common.alertar_error("nombre", "\n a) Coincide con un plato existente en el restaurante. \n b) Tiene una longitud indebida (permitido entre 5 y 25 caracteres).")
+        nombre = input(common.msg_nombre)
+    return platos  
 
+# cargar_nuevo_plato()
 # print(len(restaurantes), restaurantes)
 # def cargar_data_predefinida():
 
