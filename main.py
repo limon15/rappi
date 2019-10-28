@@ -1,4 +1,4 @@
-from cargar_data import cargar_nuevo_plato, cargar_nuevo_restaurante, cargar_restaurantes, cargar_clientes, cargar_rappitenderos
+from cargar_data import *
 from common import pedir_numero_entero
 
 
@@ -13,15 +13,9 @@ def menu():
         print("\n\t 1 - Carga de informacion predefinida.\n\t 2 - Carga de informacion manual.\n\t 3 - Pedido manual.\n\t 4 - Simulacion de pedidos.\n\t 5 - Informes.\n\t 6 - Salir.\n\n")
         opcion = pedir_numero_entero()
         if (opcion == 1):
-            restaurantes = cargar_restaurantes()
-            clientes = cargar_clientes()
-            rappitenderos = cargar_rappitenderos()
-            nombres_restaurantes = [dic['Nombre'] for dic in restaurantes]
-            nombres_clientes = [dic['Nombre'] for dic in clientes]
-            nombres_rappitenderos = [dic['Nombre'] for dic in rappitenderos]             
-            print("Se cargaron {0} restaurantes:".format(len(nombres_restaurantes)), *[i for i in nombres_restaurantes], sep="\n\t")
-            print("Se cargaron {0} clientes:".format(len(nombres_clientes)), *[i for i in nombres_clientes], sep="\n\t")
-            print("Se cargaron {0} rappitenderos:".format(len(nombres_rappitenderos)), *[i for i in nombres_rappitenderos], sep="\n\t")
+            restaurantes = cargar_restaurantes(restaurantes)
+            clientes = cargar_clientes(clientes)
+            rappitenderos = cargar_rappitenderos(rappitenderos)
         elif (opcion == 2):
             volver_atras = False
             eleccion = 0

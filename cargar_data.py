@@ -1,28 +1,51 @@
 from re import match
 from validaciones import *
+from prettytable import PrettyTable
 
 # Constantes de inputs:
 
-msg_nombre = "Ingrese un nombre aprete * para volver atras: ",
-msg_precio = "Ingrese el precio (decimales separados por '.'): ",
-msg_direccion = "Ingrese una direccion: ",
-msg_telefono = "Ingrese un telefono: ",  
-msg_latitud = "Ingrese la latitud de la direccion: ",
-msg_longitud = "Ingrese la longitud de la direccion: ",
+msg_nombre = "Ingrese un nombre o aprete * para volver atras: "
+msg_precio = "Ingrese el precio (decimales separados por '.'): "
+msg_direccion = "Ingrese una direccion: "
+msg_telefono = "Ingrese un telefono: "
+msg_latitud = "Ingrese la latitud de la direccion: "
+msg_longitud = "Ingrese la longitud de la direccion: "
 msg_radio_de_entrega = "Ingrese el radio de entrega del restaurante (en KM): "
 
+def obtener_reporte_de_carga(cant_inicial, cant_final, cant_fallados, entidad):
+    cant_nuevos = cant_final-cant_inicial
+    t = PrettyTable(['CANT. INICIAL', 'CANT. FINAL', 'CANT. NUEVOS', 'CANT. FALLADOS*'])
+    t.add_row([cant_inicial, cant_final, cant_nuevos, cant_fallados])
+    return print("REPORTE DE CARGA DE {}: \n{}{}\n".format(entidad.upper(), t, "\n* El nombre a cargar se encontraba entre los ya existentes" if cant_fallados>0 else ''))
+    # return print("\nREPORTE: \n - Antes de la carga había {1} {0}. \n - Se cargaron {2} nuevos. \n - Fallaron {3} porque el nombre se encontraba entre los ya existentes \n - Ahora hay {4} {0} cargados.".format(entidad, cant_inicial, cant_nuevos, cant_fallados, cant_final))
 
 # Data harcodeada: 
-def cargar_restaurantes():
+def cargar_restaurantes(lista_restaurantes=[]):
+    cant_inicial = len(lista_restaurantes)
+    cant_fallados = 0
     restaurantes = [
         {'Nombre': 'MARIA BONITA', 'Direccion': 'Mitre 1195, Adrogue, Buenos Aires', 'Telefono': '011 4294-1184', 'Posicion': (-34.797054, -58.391627), 'Radio de entrega': 2.5, 'Platos': [{'Nombre': 'Ensalada Ninetta', 'Precio': 250},{'Nombre': 'Rissotto ai funghi', 'Precio': 370}, {'Nombre': 'Brotola a los 4 quesos', 'Precio': 570}], 'Total de ventas': 0, 'Moneda': 'ARG'},
         {'Nombre': 'PASTA ROSSA', 'Direccion': 'Jorge San Pellerano 754, Adrogue, Buenos Aires', 'Telefono': '011 4214-3437', 'Posicion': (-34.799433, -58.390941), 'Radio de entrega': 1, 'Platos': [{'Nombre': 'Gnocchi souffle', 'Precio': 219},{'Nombre': 'Ravioli di formaggio', 'Precio': 229}, {'Nombre': 'Sorrentino di salmone', 'Precio': 310}], 'Total de ventas': 0, 'Moneda': 'ARG'},
         {'Nombre': 'PIZZERIA EL FARO', 'Direccion': 'Esteban Adrogué 1187, Adrogue, Buenos Aires', 'Telefono': '011 4214-4144', 'Posicion': (-34.798170, -58.390783), 'Radio de entrega': 3.5, 'Platos': [{'Nombre': 'Pizza muzzarella', 'Precio': 150},{'Nombre': 'Pizza napolitana', 'Precio': 170}, {'Nombre': 'Pizza ananá con azucar', 'Precio': 200}], 'Total de ventas': 0, 'Moneda': 'ARG'},
         {'Nombre': 'TIRIFILO EL BODEGON', 'Direccion': 'Cordero 694, Adrogue, Buenos Aires', 'Telefono': '011 4294-4195', 'Posicion': (-34.801080, -58.395488), 'Radio de entrega': 5, 'Platos': [{'Nombre': 'Milanesa con ensalada', 'Precio': 200},{'Nombre': 'Salteado de carne', 'Precio': 250}, {'Nombre': 'Guiso de mondongo', 'Precio': 320}], 'Total de ventas': 0, 'Moneda': 'ARG'},
         {'Nombre': 'SUSHI ADROGUE', 'Direccion': 'Int. Dr. Martín González 806, Adrogue, Buenos Aires', 'Telefono': '0810-220-2006', 'Posicion': (-34.798375, -58.396260), 'Radio de entrega': 0.5, 'Platos': [{'Nombre': 'Uramaki', 'Precio': 300},{'Nombre': 'Nirigi de atun', 'Precio': 350}, {'Nombre': 'Dorayakis', 'Precio': 400}], 'Total de ventas': 0, 'Moneda': 'ARG'}]
-    return restaurantes
+    if (cant_inicial!=0):
+        for dic in restaurantes:
+            if (nombre_no_existe_en_lista(dic['Nombre'], lista_restaurantes)):
+                lista_restaurantes.extend([dic])
+            else:
+                cant_fallados+=1    
+    else:
+        lista_restaurantes = restaurantes
+    cant_final = len(lista_restaurantes)
+    obtener_reporte_de_carga(cant_inicial, cant_final, cant_fallados, 'restaurantes')
+    return lista_restaurantes
 
-def cargar_clientes():
+# print(cargar_restaurantes([]))
+
+def cargar_clientes(lista_clientes=[]):
+    cant_inicial = len(lista_clientes)
+    cant_fallados = 0
     clientes = [
         {'Nombre': 'LUCIA MARCHESANO', 'Contraseña': 'buonabitacolo31', 'Telefono': '011 4214-7576', 'Direccion': 'Erezcano 1576, Adrogue, Buenos aires', 'Posicion': (-34.802668, -58.375369), 'Rappicreditos': 0},
         {'Nombre': 'ANA MARIA GASPARUTTI', 'Contraseña': 'nuncioyana2019', 'Telefono': '011 4214-7576', 'Direccion': 'Av. Espora 200, Adrogué, Buenos aires', 'Posicion': (-34.788542, -58.389000), 'Rappicreditos': 0},
@@ -30,9 +53,21 @@ def cargar_clientes():
         {'Nombre': 'RAUL GARCIA', 'Contraseña': 'radiopasion1929', 'Telefono': '011 4293-1833', 'Direccion': 'Benigno Macias 443, Adrogue, Buenos aires', 'Posicion': (-34.797054, -58.391627), 'Rappicreditos': 0},
         {'Nombre': 'HORTENCIA CISTERNA', 'Contraseña': 'lamuniloca', 'Telefono': '011 4294-3936', 'Direccion': 'Cerretti 876, Adrogue, Buenos aires', 'Posicion': (-34.799099, -58.386906), 'Rappicreditos': 0}
         ]
-    return clientes
+    if (cant_inicial!=0):
+        for dic in clientes:
+            if (nombre_no_existe_en_lista(dic['Nombre'], lista_clientes)):
+                lista_clientes.extend([dic])
+            else:
+                cant_fallados+=1                    
+    else:
+        lista_clientes = clientes
+    cant_final = len(lista_clientes)
+    obtener_reporte_de_carga(cant_inicial, cant_final, cant_fallados, 'clientes')      
+    return lista_clientes
 
-def cargar_rappitenderos():
+def cargar_rappitenderos(lista_rappitenderos=[]):
+    cant_inicial = len(lista_rappitenderos)
+    cant_fallados = 0
     rappitenderos = [
         {'Nombre': 'LUCIANA ARCOIRIS', 'Propina acumulada': 0, 'Posicion actual': (-34.789540, -58.373989), 'Pedido actual': None},
         {'Nombre': 'JONATHAN MOREL', 'Propina acumulada': 0, 'Posicion actual': (-34.797054, -58.391627), 'Pedido actual': None},
@@ -40,7 +75,17 @@ def cargar_rappitenderos():
         {'Nombre': 'ATENEA ANTI', 'Propina acumulada': 0, 'Posicion actual': (-34.788542, -58.389000), 'Pedido actual': None},
         {'Nombre': 'MORFI MOCHUELO', 'Propina acumulada': 0, 'Posicion actual': (-34.802668, -58.375369), 'Pedido actual': None}
     ]
-    return rappitenderos
+    if (cant_inicial!=0):
+        for dic in rappitenderos:
+            if (nombre_no_existe_en_lista(dic['Nombre'], lista_rappitenderos)):
+                lista_rappitenderos.extend([dic])
+            else:
+                cant_fallados+=1                
+    else:
+        lista_rappitenderos = rappitenderos
+    cant_final = len(lista_rappitenderos)
+    obtener_reporte_de_carga(cant_inicial, cant_final, cant_fallados, 'rappitenderos')         
+    return lista_rappitenderos
 
 # Cargar 
 def cargar_nuevo_restaurante(lista_restaurantes=[]):
@@ -92,4 +137,4 @@ def cargar_nuevo_plato():
     # print(platos)
     return platos  
 
-def cargar_nuevo_cliente():
+# def cargar_nuevo_cliente():

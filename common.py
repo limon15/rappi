@@ -1,12 +1,4 @@
-# Constantes de mensajes para inputs:
-
-msg_nombre = "Ingrese un nombre aprete * para volver atras: ",
-msg_precio = "Ingrese el precio (decimales separados por '.'): ",
-msg_direccion = "Ingrese una direccion: ",
-msg_telefono = "Ingrese un telefono: ",  
-msg_latitud = "Ingrese la latitud de la direccion: ",
-msg_longitud = "Ingrese la longitud de la direccion: ",
-msg_radio_de_entrega = "Ingrese el radio de entrega del restaurante (en KM): "
+# msg_eleccion = "La eleccion elegida fue: {}. Si es correcto escriba 'si' de lo contrario escriba 'no': ".format(restaurantes[eleccion]['Nombre'])
 
 def pedir_numero_entero():
     correcto = False
