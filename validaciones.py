@@ -32,7 +32,7 @@ def usuario_tiene_formato_valido(usuario):
     return bool(match('^[A-Za-z0-9áéíóúÁÉÍÓÚñÑ]+$', usuario))
 
 def contraseña_tiene_formato_valido(contraseña):
-    return bool(match('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$', contraseña))
+    return bool(match('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$', contraseña))
 
 def tiene_longitud_valida(campo, min, max):
     return min<=len(campo)<=max

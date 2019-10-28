@@ -42,9 +42,10 @@ def menu():
                     else: 
                         print("No hay restaurantes cargados. Primero cargue un restaurante.")    
                 elif (eleccion == 3):
-                    clientes = cargar_nuevo_clientes(clientes)                     
+                    clientes = cargar_nuevo_cliente(clientes)                     
                 elif (eleccion == 4):
-                    rappitenderos = cargar_nuevo_rappitendero(rappitenderos)                        
+                    rappitenderos = cargar_nuevo_rappitendero(rappitenderos)
+                    print(rappitenderos)                  
                 elif (eleccion == 5):
                     volver_atras = True                                                          
                 else:
