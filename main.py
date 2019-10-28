@@ -1,59 +1,70 @@
-import cargar_data
-import common
+from cargar_data import cargar_nuevo_plato, cargar_nuevo_restaurante, cargar_restaurantes, cargar_clientes, cargar_rappitenderos
+from common import pedir_numero_entero
 
-print("\t\tBienvenido a Rappi.\n")
+
 def menu():
+    print("\t\tBienvenido a Rappi.\n")
+    salir = False
+    opcion = 0
+    restaurantes = []
+    clientes = []
+    rappitenderos = []
+    while not salir:
+        print("\n\t 1 - Carga de informacion predefinida.\n\t 2 - Carga de informacion manual.\n\t 3 - Pedido manual.\n\t 4 - Simulacion de pedidos.\n\t 5 - Informes.\n\t 6 - Salir.\n\n")
+        opcion = pedir_numero_entero()
+        if (opcion == 1):
+            restaurantes = cargar_restaurantes()
+            clientes = cargar_clientes()
+            rappitenderos = cargar_rappitenderos()
+            nombres_restaurantes = [dic['Nombre'] for dic in restaurantes]
+            nombres_clientes = [dic['Nombre'] for dic in clientes]
+            nombres_rappitenderos = [dic['Nombre'] for dic in rappitenderos]             
+            print("Se cargaron {0} restaurantes:".format(len(nombres_restaurantes)), *[i for i in nombres_restaurantes], sep="\n\t")
+            print("Se cargaron {0} clientes:".format(len(nombres_clientes)), *[i for i in nombres_clientes], sep="\n\t")
+            print("Se cargaron {0} rappitenderos:".format(len(nombres_rappitenderos)), *[i for i in nombres_rappitenderos], sep="\n\t")
+        elif (opcion == 2):
+            volver_atras = False
+            eleccion = 0
+            while not volver_atras:
+                print("\n\t 1 - Cargar un nuevo restaurante.\n\t 2 - Cargar un nuevo plato.\n\t 3 - Cargar un nuevo cliente.\n\t 4 - Cargar un nuevo rappitendero.\n\t 5 - Volver al menu anterior.\n\n")
+                eleccion = pedir_numero_entero()
+                if (eleccion == 1):
+                    restaurantes = cargar_nuevo_restaurante(restaurantes)
+                    print(restaurantes)              
+                elif (eleccion == 2):
+                    if restaurantes:
+                        nombres_restaurantes = [dic['Nombre'] for dic in restaurantes]
+                        print("\tElija el restaurante para el cual desea cargar el plato: ")
+                        # print(*[i, nombres_restaurantes[i] for i in nombres_restaurantes])
+                        for index, value in enumerate(nombres_restaurantes):
+                            print("\t\t{} - {}".format(index, value))
+                        eleccion = pedir_numero_entero()
+                        validar_eleccion = input("La eleccion elegida fue: {}. Si es correcto escriba 'si' de lo contrario escriba 'no': ".format(restaurantes[eleccion]['Nombre']))
+                        while not (validar_eleccion.upper() == 'SI'):
+                            validar_eleccion = input("Le eleccion elegida fue: {}. Si es correcto escriba 'si' de lo contrario escriba 'no': ".format(restaurantes[eleccion]['Nombre']))
+                        restaurantes[eleccion]['Platos'].extend(cargar_nuevo_plato())
+                        print(restaurantes[eleccion])
+                        print(restaurantes)
+                    else: 
+                        print("No hay restaurantes cargados. Primero cargue un restaurante.")
+    
+                # elif (eleccion == 3):
+                # elif (eleccion == 4):
+                elif (eleccion == 5):
+                    volver_atras = True                                                          
+                else:
+                    print("Error. La opcion ingresada no se encuentra en el menu.")                
 
-  salir = False
-  opcion = 0
-  restaurantes = []
-  clientes = []
-  rappitenderos = []
-  while not salir:
-
-    print("\n\t 1 - Carga de informacion predefinida.\n\t 2 - Carga de informacion manual.\n\t 3 - Pedido manual.\n\t 4 - Simulacion de pedidos.\n\t 5 - Informes.\n\t 6 - Salir.\n\n")
-
-    opcion = common.pedir_numero_entero()
-
-    if (opcion == 1):
-      restaurantes = cargar_data.cargar_restaurantes()
-      clientes = cargar_data.cargar_clientes()
-      rappitenderos = cargar_data.cargar_rappitenderos()
-      nombres_restaurantes = [dic['Nombre'] for dic in restaurantes]
-      nombres_clientes = [dic['Nombre'] for dic in clientes]
-      nombres_rappitenderos = [dic['Nombre'] for dic in rappitenderos]             
-      print("Se cargaron {0} restaurantes:".format(len(nombres_restaurantes)), *[i for i in nombres_restaurantes], sep="\n\t")
-      print("Se cargaron {0} clientes:".format(len(nombres_clientes)), *[i for i in nombres_clientes], sep="\n\t")
-      print("Se cargaron {0} rappitenderos:".format(len(nombres_rappitenderos)), *[i for i in nombres_rappitenderos], sep="\n\t")
-    #   index, value in enumerate(test_list)  
-    elif (opcion == 2):
-        volver_atras = False
-        eleccion = 0
-        while not volver_atras:
-            print("\n\t 1 - Cargar un nuevo restaurante.\n\t 2 - Cargar un nuevo plato.\n\t 3 - Cargar un nuevo cliente.\n\t 4 - Cargar un nuevo rappitendero.\n\t 5 - Volver al menu anterior.\n\n")
-            eleccion = common.pedir_numero_entero()
-            if (eleccion == 1):
-                cargar_data.cargar_nuevo_restaurante(restaurantes)               
-            # elif (eleccion == 2):   
-            #     print("Opcion 3")   
-            # elif (eleccion == 3):
-            # elif (eleccion == 4):
-            elif (eleccion == 5):
-                volver_atras = True                                                          
-            else:
-                print("Error. La opcion ingresada no se encuentra en el menu.")                
-
-    elif (opcion == 3):
-        print("Opcion 3")
-    elif (opcion == 4):
-        print("Opcion 4")
-    elif (opcion == 5):
-        print("Opcion 5")
-    elif (opcion == 6):
-        salir = True
-    else:
-        print("Error. La opcion ingresada no se encuentra en el menu.")
-
-  print("Adios.")
+        elif (opcion == 3):
+            print("Opcion 3")
+        elif (opcion == 4):
+            print("Opcion 4")
+        elif (opcion == 5):
+            print("Opcion 5")
+        elif (opcion == 6):
+            salir = True
+        else:
+            print("Error. La opcion ingresada no se encuentra en el menu.")
+    print("Adios.")
 
 menu()

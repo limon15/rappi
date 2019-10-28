@@ -1,92 +1,95 @@
-import re
-import common
+from re import match
+from validaciones import *
 
+# Constantes de inputs:
+
+msg_nombre = "Ingrese un nombre aprete * para volver atras: ",
+msg_precio = "Ingrese el precio (decimales separados por '.'): ",
+msg_direccion = "Ingrese una direccion: ",
+msg_telefono = "Ingrese un telefono: ",  
+msg_latitud = "Ingrese la latitud de la direccion: ",
+msg_longitud = "Ingrese la longitud de la direccion: ",
+msg_radio_de_entrega = "Ingrese el radio de entrega del restaurante (en KM): "
+
+
+# Data harcodeada: 
 def cargar_restaurantes():
     restaurantes = [
-        {'Nombre': 'Maria Bonita', 'Direccion': 'Mitre 1195, Adrogue, Buenos Aires', 'Telefono': '011 4294-1184', 'Posicion': (-34.797054, -58.391627), 'Radio de entrega': 2.5, 'Platos': [{'Nombre': 'Ensalada Ninetta', 'Precio': 250},{'Nombre': 'Rissotto ai funghi', 'Precio': 370}, {'Nombre': 'Brotola a los 4 quesos', 'Precio': 570}], 'Total de ventas': None, 'Moneda': 'ARG'},
-        {'Nombre': 'Pasta Rossa', 'Direccion': 'Jorge San Pellerano 754, Adrogue, Buenos Aires', 'Telefono': '011 4214-3437', 'Posicion': (-34.799433, -58.390941), 'Radio de entrega': 1, 'Platos': [{'Nombre': 'Gnocchi souffle', 'Precio': 219},{'Nombre': 'Ravioli di formaggio', 'Precio': 229}, {'Nombre': 'Sorrentino di salmone', 'Precio': 310}], 'Total de ventas': None, 'Moneda': 'ARG'},
-        {'Nombre': 'Pizzeria el Faro', 'Direccion': 'Esteban Adrogué 1187, Adrogue, Buenos Aires', 'Telefono': '011 4214-4144', 'Posicion': (-34.798170, -58.390783), 'Radio de entrega': 3.5, 'Platos': [{'Nombre': 'Pizza muzzarella', 'Precio': 150},{'Nombre': 'Pizza napolitana', 'Precio': 170}, {'Nombre': 'Pizza ananá con azucar', 'Precio': 200}], 'Total de ventas': None, 'Moneda': 'ARG'},
-        {'Nombre': 'Tirifilo El Bodegon', 'Direccion': 'Cordero 694, Adrogue, Buenos Aires', 'Telefono': '011 4294-4195', 'Posicion': (-34.801080, -58.395488), 'Radio de entrega': 5, 'Platos': [{'Nombre': 'Milanesa con ensalada', 'Precio': 200},{'Nombre': 'Salteado de carne', 'Precio': 250}, {'Nombre': 'Guiso de mondongo', 'Precio': 320}], 'Total de ventas': None, 'Moneda': 'ARG'},
-        {'Nombre': 'Sushi Adrogue', 'Direccion': 'Int. Dr. Martín González 806, Adrogue, Buenos Aires', 'Telefono': '0810-220-2006', 'Posicion': (-34.798375, -58.396260), 'Radio de entrega': 0.5, 'Platos': [{'Nombre': 'Uramaki', 'Precio': 300},{'Nombre': 'Nirigi de atun', 'Precio': 350}, {'Nombre': 'Dorayakis', 'Precio': 400}], 'Total de ventas': None, 'Moneda': 'ARG'}]
+        {'Nombre': 'MARIA BONITA', 'Direccion': 'Mitre 1195, Adrogue, Buenos Aires', 'Telefono': '011 4294-1184', 'Posicion': (-34.797054, -58.391627), 'Radio de entrega': 2.5, 'Platos': [{'Nombre': 'Ensalada Ninetta', 'Precio': 250},{'Nombre': 'Rissotto ai funghi', 'Precio': 370}, {'Nombre': 'Brotola a los 4 quesos', 'Precio': 570}], 'Total de ventas': 0, 'Moneda': 'ARG'},
+        {'Nombre': 'PASTA ROSSA', 'Direccion': 'Jorge San Pellerano 754, Adrogue, Buenos Aires', 'Telefono': '011 4214-3437', 'Posicion': (-34.799433, -58.390941), 'Radio de entrega': 1, 'Platos': [{'Nombre': 'Gnocchi souffle', 'Precio': 219},{'Nombre': 'Ravioli di formaggio', 'Precio': 229}, {'Nombre': 'Sorrentino di salmone', 'Precio': 310}], 'Total de ventas': 0, 'Moneda': 'ARG'},
+        {'Nombre': 'PIZZERIA EL FARO', 'Direccion': 'Esteban Adrogué 1187, Adrogue, Buenos Aires', 'Telefono': '011 4214-4144', 'Posicion': (-34.798170, -58.390783), 'Radio de entrega': 3.5, 'Platos': [{'Nombre': 'Pizza muzzarella', 'Precio': 150},{'Nombre': 'Pizza napolitana', 'Precio': 170}, {'Nombre': 'Pizza ananá con azucar', 'Precio': 200}], 'Total de ventas': 0, 'Moneda': 'ARG'},
+        {'Nombre': 'TIRIFILO EL BODEGON', 'Direccion': 'Cordero 694, Adrogue, Buenos Aires', 'Telefono': '011 4294-4195', 'Posicion': (-34.801080, -58.395488), 'Radio de entrega': 5, 'Platos': [{'Nombre': 'Milanesa con ensalada', 'Precio': 200},{'Nombre': 'Salteado de carne', 'Precio': 250}, {'Nombre': 'Guiso de mondongo', 'Precio': 320}], 'Total de ventas': 0, 'Moneda': 'ARG'},
+        {'Nombre': 'SUSHI ADROGUE', 'Direccion': 'Int. Dr. Martín González 806, Adrogue, Buenos Aires', 'Telefono': '0810-220-2006', 'Posicion': (-34.798375, -58.396260), 'Radio de entrega': 0.5, 'Platos': [{'Nombre': 'Uramaki', 'Precio': 300},{'Nombre': 'Nirigi de atun', 'Precio': 350}, {'Nombre': 'Dorayakis', 'Precio': 400}], 'Total de ventas': 0, 'Moneda': 'ARG'}]
     return restaurantes
 
 def cargar_clientes():
     clientes = [
-        {'Nombre': 'Lucia Marchesano', 'Contraseña': 'buonabitacolo31', 'Telefono': '011 4214-7576', 'Direccion': 'Erezcano 1576, Adrogue, Buenos aires', 'Posicion': (-34.802668, -58.375369), 'Rappicreditos': None},
-        {'Nombre': 'Ana Maria Gasparutti', 'Contraseña': 'nuncioyana2019', 'Telefono': '011 4214-7576', 'Direccion': 'Av. Espora 200, Adrogué, Buenos aires', 'Posicion': (-34.788542, -58.389000), 'Rappicreditos': None},
-        {'Nombre': 'Tero Martignetti', 'Contraseña': 'onlyfood17', 'Telefono': '011 4293-6406', 'Direccion': 'King 725, José Mármol, Buenos aires', 'Posicion': (-34.789540, -58.373989), 'Rappicreditos': None},
-        {'Nombre': 'Raul Garcia', 'Contraseña': 'radiopasion1929', 'Telefono': '011 4293-1833', 'Direccion': 'Benigno Macias 443, Adrogue, Buenos aires', 'Posicion': (-34.797054, -58.391627), 'Rappicreditos': None},
-        {'Nombre': 'Hortencia Cisterna', 'Contraseña': 'lamuniloca', 'Telefono': '011 4294-3936', 'Direccion': 'Cerretti 876, Adrogue, Buenos aires', 'Posicion': (-34.799099, -58.386906), 'Rappicreditos': None}
+        {'Nombre': 'LUCIA MARCHESANO', 'Contraseña': 'buonabitacolo31', 'Telefono': '011 4214-7576', 'Direccion': 'Erezcano 1576, Adrogue, Buenos aires', 'Posicion': (-34.802668, -58.375369), 'Rappicreditos': 0},
+        {'Nombre': 'ANA MARIA GASPARUTTI', 'Contraseña': 'nuncioyana2019', 'Telefono': '011 4214-7576', 'Direccion': 'Av. Espora 200, Adrogué, Buenos aires', 'Posicion': (-34.788542, -58.389000), 'Rappicreditos': 0},
+        {'Nombre': 'TERO MARTIGNETTI', 'Contraseña': 'onlyfood17', 'Telefono': '011 4293-6406', 'Direccion': 'King 725, José Mármol, Buenos aires', 'Posicion': (-34.789540, -58.373989), 'Rappicreditos': 0},
+        {'Nombre': 'RAUL GARCIA', 'Contraseña': 'radiopasion1929', 'Telefono': '011 4293-1833', 'Direccion': 'Benigno Macias 443, Adrogue, Buenos aires', 'Posicion': (-34.797054, -58.391627), 'Rappicreditos': 0},
+        {'Nombre': 'HORTENCIA CISTERNA', 'Contraseña': 'lamuniloca', 'Telefono': '011 4294-3936', 'Direccion': 'Cerretti 876, Adrogue, Buenos aires', 'Posicion': (-34.799099, -58.386906), 'Rappicreditos': 0}
         ]
     return clientes
 
 def cargar_rappitenderos():
     rappitenderos = [
-        {'Nombre': 'Luciana Arcoiris', 'Propina acumulada': None, 'Posicion actual': (-34.789540, -58.373989), 'Pedido actual': None},
-        {'Nombre': 'Jonathan Morel', 'Propina acumulada': None, 'Posicion actual': (-34.797054, -58.391627), 'Pedido actual': None},
-        {'Nombre': 'Aureliano Oliva', 'Propina acumulada': None, 'Posicion actual': (-34.799099, -58.386906), 'Pedido actual': None},
-        {'Nombre': 'Atenea Anti', 'Propina acumulada': None, 'Posicion actual': (-34.788542, -58.389000), 'Pedido actual': None},
-        {'Nombre': 'Morfi Mochuelo', 'Propina acumulada': None, 'Posicion actual': (-34.802668, -58.375369), 'Pedido actual': None}
+        {'Nombre': 'LUCIANA ARCOIRIS', 'Propina acumulada': 0, 'Posicion actual': (-34.789540, -58.373989), 'Pedido actual': None},
+        {'Nombre': 'JONATHAN MOREL', 'Propina acumulada': 0, 'Posicion actual': (-34.797054, -58.391627), 'Pedido actual': None},
+        {'Nombre': 'AURELIANO OLIVA', 'Propina acumulada': 0, 'Posicion actual': (-34.799099, -58.386906), 'Pedido actual': None},
+        {'Nombre': 'ATENEA ANTI', 'Propina acumulada': 0, 'Posicion actual': (-34.788542, -58.389000), 'Pedido actual': None},
+        {'Nombre': 'MORFI MOCHUELO', 'Propina acumulada': 0, 'Posicion actual': (-34.802668, -58.375369), 'Pedido actual': None}
     ]
     return rappitenderos
 
-# def cargar_nuevo_restaurante(lista_restaurantes=[]):
-#     # platos = []
-#     nombre = input("Ingrese nombre de un plato o aprete * para volver atras: ")
-#     while nombre!='*':
-#         if (nombre not in [dic['nombre'] for dic in lista_restaurantes] and 5<len(nombre)<25):
-#             precio = input("Ingrese el precio del plato '{}': ".format(nombre))
-#             while not (precio.isnumeric()):
-#                 precio = input("El valor ingresado para el precio no es un numero. Ingrese un valor numerico para el precio de '{}': ".format(nombre))
-
-#             direccion = input("Ingrese la direccion: ") 
-#             platos.append({'nombre': nombre, 'precio': precio})
-#         else :
-#             print("El nombre del plato coincide con un plato existente o tiene una longitud indebida. Intente nuevamente.")
-
-#         nombre = input("Ingrese el nombre de un plato o aprete * para volver atras: ")
-
-#     # nombres_restaurantes = [dic['Nombre'] for dic in lista_restaurantes]
-#     # nombre, direccion, telefono, latitud, longitud, radio_entrega, platos = ''
-#     while not (nombre not in nombres_restaurantes and 5<len(nombre)<25):
-#         nombre = input("Ingrese el nombre del restaurante a cargar: "),
-#     while not (nombre not in nombres_restaurantes and 5<len(nombre)<25):
-#         nombre = input("Ingrese el nombre del restaurante a cargar: ")    
-#     direccion = input("Ingrese la direccion: ") 
-#     telefono = input("Ingrese el telefono: ")    
-#     latitud = float(input("Ingrese la latitud: "))
-#     longitud = float(input("Ingrese la longitud: "))
-#     posicion = (latitud, longitud)
-#     radio_entrega = float(input("Ingrese el radio de entrega (km): "))
-#     platos = cargar_nuevo_plato()                 
-#     lista_restaurantes.append({'Nombre':nombre}) 
+# Cargar 
+def cargar_nuevo_restaurante(lista_restaurantes=[]):
+    nombre = input(msg_nombre)
+    while nombre!='*':
+        if (nombre_no_existe_en_lista(nombre, lista_restaurantes) and nombre_tiene_formato_valido(nombre) and nombre_tiene_longitud_valida(nombre)):
+            direccion = input(msg_direccion)
+            while not direccion_tiene_formato_valido(direccion):
+                alertar_error("direccion", "El valor ingresado no debe ser vacio.")
+                direccion = input(msg_direccion)
+            telefono = input(msg_telefono)
+            while not (telefono_tiene_formato_valido(telefono) and parentesis_balanceados(telefono)):
+                alertar_error("telefono", "Ingrese solo numeros, espacios, guiones, '+' y parentesis.")
+                telefono = input(msg_telefono)
+            latitud = input(msg_latitud)
+            while not latitud_tiene_formato_valido(latitud):
+                alertar_error("latitud", "Ingrese solo numeros entre -90 y 90 (decimales separados por '.').")
+                latitud = input(msg_latitud)
+            longitud = input(msg_longitud)            
+            while not longitud_tiene_formato_valido(longitud):
+                alertar_error("longitud", "Ingrese solo numeros entre -180 y 180 (decimales separados por '.').")
+                longitud = input(msg_longitud)
+            radio_de_entrega = input(msg_radio_de_entrega)
+            while not radio_de_entrega_tiene_formato_valido(radio_de_entrega):
+                alertar_error("radio de entrega", "Ingrese solo numeros positivos (decimales separados por '.').")
+                radio_de_entrega = input(msg_radio_de_entrega)
+            print("Ingrese los platos del restaurante '{}': ".format(nombre))    
+            platos = cargar_nuevo_plato()
+            lista_restaurantes.append({'Nombre': nombre.upper(), 'Direccion': direccion, 'Telefono': telefono, 'Posicion': (float(latitud), float(longitud)), 'Radio de entrega': radio_de_entrega, 'Platos': platos, 'Total de ventas': 0, 'Moneda': 'ARG'})            
+        else:
+            alertar_error("nombre", "\n a) Coincide con un plato existente en el restaurante. \n b) Tiene una longitud indebida (permitido entre 5 y 25 caracteres).")
+        nombre = input(msg_nombre)
+    # print(lista_restaurantes)
+    return lista_restaurantes   
 
 def cargar_nuevo_plato():
     platos = []
-    nombre = input(common.msg_nombre)
+    nombre = input(msg_nombre)
     while nombre!='*':
-        if (nombre not in [dic['Nombre'] for dic in platos] and 5<len(nombre)<25) and not bool(re.match('[^A-Za-z0-9]+', nombre)):
-            precio = input(common.msg_precio)
-            while not bool(re.match('^\d{1,4}$', precio)):
-                common.alertar_error("precio", "\n a) No es un numero positivo. \n b) Tiene caracteres incorrectos para el indicio de decimal, utilice '.'. \n c) No se encuentra entre 1 y 9999.")           
-                precio = input(common.msg_precio)
-            precio = round(float(precio),2)
-            platos.append({'Nombre': nombre, 'Precio': precio})
-        else :
-            common.alertar_error("nombre", "\n a) Coincide con un plato existente en el restaurante. \n b) Tiene una longitud indebida (permitido entre 5 y 25 caracteres).")
-        nombre = input(common.msg_nombre)
+        if (nombre_no_existe_en_lista(nombre, platos) and nombre_tiene_formato_valido(nombre) and nombre_tiene_longitud_valida(nombre)):
+            precio = input(msg_precio)
+            while not precio_tiene_formato_valido(precio):
+                alertar_error("precio", "\n a) No es un numero positivo. \n b) Tiene caracteres incorrectos para el indicio de decimal, utilice '.'. \n c) No se encuentra entre 0 y 9999.")           
+                precio = input(msg_precio)
+            platos.append({'Nombre': nombre.upper(), 'Precio': round(float(precio),2)})
+        else:
+            alertar_error("nombre", "\n a) Coincide con un plato existente en el restaurante. \n b) Tiene una longitud indebida (permitido entre 5 y 25 caracteres).")
+        nombre = input(msg_nombre)
+    # print(platos)
     return platos  
 
-# cargar_nuevo_plato()
-
-# print(len(restaurantes), restaurantes)
-# def cargar_data_predefinida():
-
-
-    # clientes = cargar_clientes()
-    # rappitenderos = cargar_rappitenderos()
-
-    # return restaurantes
-    # , clientes, rappitenderos
-
-# print(cargar_data_predefinida())
+def cargar_nuevo_cliente():
