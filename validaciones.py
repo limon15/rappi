@@ -3,14 +3,11 @@ from re import match
 def alertar_error(campo, msg_adicional = ''):
     return print("El valor ingresado para '{0}' no es valido. {1}{2}Intente nuevamente.".format(campo, msg_adicional, '\n' if msg_adicional else ''))
 
-def nombre_no_existe_en_lista(nombre, lista_datos):
-    return nombre.upper() not in [dic['Nombre'] for dic in lista_datos]
+def no_existe_en_lista(cadena, campo, lista_datos):
+    return cadena.upper() not in [dic[campo] for dic in lista_datos]
 
 def nombre_tiene_formato_valido(nombre):
     return bool(match('^[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ]+$', nombre))
-
-def nombre_tiene_longitud_valida(nombre):
-    return 5<=len(nombre)<=25
 
 def precio_tiene_formato_valido(precio):
     return bool(match('^[0-9.]{1,7}$', precio))
@@ -30,6 +27,15 @@ def longitud_tiene_formato_valido(longitud):
 
 def radio_de_entrega_tiene_formato_valido(radio_de_entrega):
     return bool(match('^[0-9]{1,2}([.])*([0-9]{1,2})*$', radio_de_entrega))
+
+def usuario_tiene_formato_valido(usuario):
+    return bool(match('^[A-Za-z0-9áéíóúÁÉÍÓÚñÑ]+$', usuario))
+
+def contraseña_tiene_formato_valido(contraseña):
+    return bool(match('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$', contraseña))
+
+def tiene_longitud_valida(campo, min, max):
+    return min<=len(campo)<=max
 
 def parentesis_balanceados(cadena): 
     parentesis_abre = '('

@@ -1,6 +1,7 @@
 from re import match
 from validaciones import *
 from prettytable import PrettyTable
+from random import choice
 
 # Constantes de inputs:
 
@@ -11,6 +12,9 @@ msg_telefono = "Ingrese un telefono: "
 msg_latitud = "Ingrese la latitud de la direccion: "
 msg_longitud = "Ingrese la longitud de la direccion: "
 msg_radio_de_entrega = "Ingrese el radio de entrega del restaurante (en KM): "
+msg_usuario = "Ingrese un nombre de usuario: "
+msg_contraseña = "Ingrese una contraseña: "
+
 
 def obtener_reporte_de_carga(cant_inicial, cant_final, cant_fallados, entidad):
     cant_nuevos = cant_final-cant_inicial
@@ -31,7 +35,7 @@ def cargar_restaurantes(lista_restaurantes=[]):
         {'Nombre': 'SUSHI ADROGUE', 'Direccion': 'Int. Dr. Martín González 806, Adrogue, Buenos Aires', 'Telefono': '0810-220-2006', 'Posicion': (-34.798375, -58.396260), 'Radio de entrega': 0.5, 'Platos': [{'Nombre': 'Uramaki', 'Precio': 300},{'Nombre': 'Nirigi de atun', 'Precio': 350}, {'Nombre': 'Dorayakis', 'Precio': 400}], 'Total de ventas': 0, 'Moneda': 'ARG'}]
     if (cant_inicial!=0):
         for dic in restaurantes:
-            if (nombre_no_existe_en_lista(dic['Nombre'], lista_restaurantes)):
+            if (no_existe_en_lista(dic['Nombre'], 'Nombre', lista_restaurantes)):
                 lista_restaurantes.extend([dic])
             else:
                 cant_fallados+=1    
@@ -55,7 +59,7 @@ def cargar_clientes(lista_clientes=[]):
         ]
     if (cant_inicial!=0):
         for dic in clientes:
-            if (nombre_no_existe_en_lista(dic['Nombre'], lista_clientes)):
+            if (no_existe_en_lista(dic['Nombre'], 'Nombre', lista_clientes)):
                 lista_clientes.extend([dic])
             else:
                 cant_fallados+=1                    
@@ -77,7 +81,7 @@ def cargar_rappitenderos(lista_rappitenderos=[]):
     ]
     if (cant_inicial!=0):
         for dic in rappitenderos:
-            if (nombre_no_existe_en_lista(dic['Nombre'], lista_rappitenderos)):
+            if (no_existe_en_lista(dic['Nombre'], 'Nombre', lista_rappitenderos)):
                 lista_rappitenderos.extend([dic])
             else:
                 cant_fallados+=1                
@@ -91,7 +95,7 @@ def cargar_rappitenderos(lista_rappitenderos=[]):
 def cargar_nuevo_restaurante(lista_restaurantes=[]):
     nombre = input(msg_nombre)
     while nombre!='*':
-        if (nombre_no_existe_en_lista(nombre, lista_restaurantes) and nombre_tiene_formato_valido(nombre) and nombre_tiene_longitud_valida(nombre)):
+        if (no_existe_en_lista(nombre, 'Nombre', lista_restaurantes) and nombre_tiene_formato_valido(nombre) and tiene_longitud_valida(nombre, 5, 25)):
             direccion = input(msg_direccion)
             while not direccion_tiene_formato_valido(direccion):
                 alertar_error("direccion", "El valor ingresado no debe ser vacio.")
@@ -116,16 +120,15 @@ def cargar_nuevo_restaurante(lista_restaurantes=[]):
             platos = cargar_nuevo_plato()
             lista_restaurantes.append({'Nombre': nombre.upper(), 'Direccion': direccion, 'Telefono': telefono, 'Posicion': (float(latitud), float(longitud)), 'Radio de entrega': radio_de_entrega, 'Platos': platos, 'Total de ventas': 0, 'Moneda': 'ARG'})            
         else:
-            alertar_error("nombre", "\n a) Coincide con un plato existente en el restaurante. \n b) Tiene una longitud indebida (permitido entre 5 y 25 caracteres).")
+            alertar_error("nombre", "\n a) Coincide con un restaurante existente. \n b) Tiene una longitud indebida (permitido entre 5 y 25 caracteres).")
         nombre = input(msg_nombre)
-    # print(lista_restaurantes)
     return lista_restaurantes   
 
 def cargar_nuevo_plato():
-    platos = []
+    lista_de_platos = []
     nombre = input(msg_nombre)
     while nombre!='*':
-        if (nombre_no_existe_en_lista(nombre, platos) and nombre_tiene_formato_valido(nombre) and nombre_tiene_longitud_valida(nombre)):
+        if (no_existe_en_lista(nombre, 'Nombre', lista_de_platos) and nombre_tiene_formato_valido(nombre) and tiene_longitud_valida(nombre, 5, 25)):
             precio = input(msg_precio)
             while not precio_tiene_formato_valido(precio):
                 alertar_error("precio", "\n a) No es un numero positivo. \n b) Tiene caracteres incorrectos para el indicio de decimal, utilice '.'. \n c) No se encuentra entre 0 y 9999.")           
@@ -134,7 +137,49 @@ def cargar_nuevo_plato():
         else:
             alertar_error("nombre", "\n a) Coincide con un plato existente en el restaurante. \n b) Tiene una longitud indebida (permitido entre 5 y 25 caracteres).")
         nombre = input(msg_nombre)
-    # print(platos)
-    return platos  
+    return lista_de_platos  
 
-# def cargar_nuevo_cliente():
+def cargar_nuevo_cliente(lista_clientes=[]):
+    usuario = input(msg_usuario)
+    while usuario!='*':
+        if (no_existe_en_lista(usuario, 'Nombre de usuario', lista_clientes) and usuario_tiene_formato_valido(usuario) and tiene_longitud_valida(usuario, 3, 12)):
+            contraseña = input(msg_contraseña)
+            while not contraseña_tiene_formato_valido(contraseña):
+                alertar_error("contraseña", "Debe tener 8 caracteres con al menos un digito, una mayuscula, una minuscula y un caracter especial.")
+            telefono = input(msg_telefono)
+            while not (telefono_tiene_formato_valido(telefono) and parentesis_balanceados(telefono)):
+                alertar_error("telefono", "Ingrese solo numeros, espacios, guiones, '+' y parentesis.")
+                telefono = input(msg_telefono)
+            direccion = input(msg_direccion)                
+            while not direccion_tiene_formato_valido(direccion):
+                alertar_error("direccion", "El valor ingresado no debe ser vacio.")
+                direccion = input(msg_direccion)                
+            latitud = input(msg_latitud)
+            while not latitud_tiene_formato_valido(latitud):
+                alertar_error("latitud", "Ingrese solo numeros entre -90 y 90 (decimales separados por '.').")
+                latitud = input(msg_latitud)
+            longitud = input(msg_longitud)            
+            while not longitud_tiene_formato_valido(longitud):
+                alertar_error("longitud", "Ingrese solo numeros entre -180 y 180 (decimales separados por '.').")
+                longitud = input(msg_longitud)
+            lista_clientes.append({'Nombre de usuario': usuario.upper(), 'Contraseña': round(float(contraseña),2), 'Telefono': telefono, 'Direccion': direccion, 'Posicion': (float(latitud), float(longitud)), 'Rappicreditos': 0 })
+        else:
+            alertar_error("usuario", "\n a) Coincide con un cliente existente. \n b) Tiene una longitud indebida (permitido entre 3 y 12 caracteres).")
+        usuario = input(msg_usuario)              
+    return lista_clientes
+
+cargar_nuevo_rappitendero(lista_restaurantes=[]):
+    lista_rappitenderos=[]
+    nombre = input(msg_nombre)
+    while nombre!='*':
+        if (nombre_tiene_formato_valido(nombre)):
+            if (len(lista_restaurantes)!=0):
+                posicion_actual = choice(lista_restaurantes)['Posicion']
+            else:
+                print("Aun no se han cargado restaurantes. El rappitendero no puede ser creado.")
+                break 
+            lista_rappitenderos.append({'Nombre': nombre.upper(), 'Propina acumulada': 0, 'Posicion actual': posicion_actual, 'Pedido actual': None})
+        else:
+            alertar_error("nombre", "\n a) Tiene un formato valido.")
+        nombre = input(msg_nombre)              
+    return lista_rappitenderos  

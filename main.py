@@ -24,7 +24,7 @@ def menu():
                 eleccion = pedir_numero_entero()
                 if (eleccion == 1):
                     restaurantes = cargar_nuevo_restaurante(restaurantes)
-                    print(restaurantes)              
+                    # print(restaurantes)              
                 elif (eleccion == 2):
                     if restaurantes:
                         nombres_restaurantes = [dic['Nombre'] for dic in restaurantes]
@@ -40,10 +40,11 @@ def menu():
                         print(restaurantes[eleccion])
                         print(restaurantes)
                     else: 
-                        print("No hay restaurantes cargados. Primero cargue un restaurante.")
-    
-                # elif (eleccion == 3):
-                # elif (eleccion == 4):
+                        print("No hay restaurantes cargados. Primero cargue un restaurante.")    
+                elif (eleccion == 3):
+                    clientes = cargar_nuevo_clientes(clientes)                     
+                elif (eleccion == 4):
+                    rappitenderos = cargar_nuevo_rappitendero(rappitenderos)                        
                 elif (eleccion == 5):
                     volver_atras = True                                                          
                 else:
