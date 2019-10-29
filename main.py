@@ -1,5 +1,6 @@
 from cargar_data import *
 from common import pedir_numero_entero
+from informes import informes
 
 
 def menu():
@@ -37,15 +38,15 @@ def menu():
                         while not (validar_eleccion.upper() == 'SI'):
                             validar_eleccion = input("Le eleccion elegida fue: {}. Si es correcto escriba 'si' de lo contrario escriba 'no': ".format(restaurantes[eleccion]['Nombre']))
                         restaurantes[eleccion]['Platos'].extend(cargar_nuevo_plato())
-                        print(restaurantes[eleccion])
-                        print(restaurantes)
+                        # print(restaurantes[eleccion])
+                        # print(restaurantes)
                     else: 
                         print("No hay restaurantes cargados. Primero cargue un restaurante.")    
                 elif (eleccion == 3):
                     clientes = cargar_nuevo_cliente(clientes)                     
                 elif (eleccion == 4):
                     rappitenderos = cargar_nuevo_rappitendero(rappitenderos)
-                    print(rappitenderos)                  
+                    # print(rappitenderos)                  
                 elif (eleccion == 5):
                     volver_atras = True                                                          
                 else:
@@ -56,7 +57,7 @@ def menu():
         elif (opcion == 4):
             print("Opcion 4")
         elif (opcion == 5):
-            print("Opcion 5")
+            informes(clientes, restaurantes, rappitenderos)
         elif (opcion == 6):
             salir = True
         else:
@@ -64,3 +65,5 @@ def menu():
     print("Adios.")
 
 menu()
+
+                       
