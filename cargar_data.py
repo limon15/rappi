@@ -188,7 +188,7 @@ def validar_nombre_eleccion_entidad(eleccion, entidad):
     return True if validar_eleccion.upper() == 'SI' else False
 
 def actualizar_platos_restaurante(lista_restaurantes):
-    existen_restaurantes = evaluar_existencia_entidad(lista_restaurantes)
+    existen_restaurantes = evaluar_existencia_entidad(lista_restaurantes, "restaurantes")
     if existen_restaurantes:
         opcion_validada = False
         while not opcion_validada:

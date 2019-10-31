@@ -1,6 +1,6 @@
 # msg_eleccion = "La eleccion elegida fue: {}. Si es correcto escriba 'si' de lo contrario escriba 'no': ".format(restaurantes[eleccion]['Nombre'])
 # from prettytable import PrettyTable
-from prettytable import *
+from prettytable import PrettyTable, ALL
 
 
 def pedir_numero_entero():
@@ -43,7 +43,6 @@ def solicitar_ingreso_de_opcion(tabs=0):
 
 # Función que solo muestra opciones, no pide ni devuelve ningun valor.
 def listar_opciones(lista_opciones, tabs=0):
-    # print("\n")
     for i, o in enumerate(lista_opciones):
         print("\t"*tabs, i, "-", o)    
 
@@ -62,20 +61,22 @@ def devolver_item_lista_entidad_segun_clave_valor(entidad, clave, valor):
     while i<len(entidad) and item == '':
         item = entidad[i] if entidad[i][clave] == valor else ''
         i+=1
-    return item
-# imprimir_titulo_seccion("SIMULACIONES")    
+    return item  
 
 def obtener_lista_nombres_restaurantes(lista_restaurantes):
     nombres_restaurantes = [dic['Nombre'] for dic in lista_restaurantes]
     return nombres_restaurantes
-    # platos = []
-    # limit = len(restaurant_elegido['Platos']) if limit==0 else limit
-    # for i in range(limit):      
-    #     platos.append(f"{restaurant_elegido['Platos'][i]['Nombre']} - ${restaurant_elegido['Platos'][i]['Precio']}")
-    # return platos  
 
 def evaluar_existencia_entidad(entidad, nombre_entidad):
     existencia_entidad = False if len(entidad) == 0 else True
     if not existencia_entidad:
         print("\nNo hay {0} cargados. Pruebe cargando datos de {0} previamente.\n".format(nombre_entidad))    
     return existencia_entidad
+
+
+def calcular_importe_pedido_manual(platos_restaurante, lista_pedidos):
+    importe_total = 0
+    for i in range(len(lista_pedidos)):
+        plato = devolver_item_lista_entidad_segun_clave_valor(platos_restaurante, 'Nombre', lista_pedidos[i][1])
+        importe_total += float(plato['Precio'])*int(lista_pedidos[i][0])
+    return importe_total    

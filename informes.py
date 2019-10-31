@@ -1,4 +1,4 @@
-from common import *
+from common import evaluar_informacion_suficiente, devolver_opcion_elegida_validada_desde_lista, imprimir_aviso_de_retorno_al_menu_anterior
 
 # Función que solo muestra los restaurantes de mayor total de ventas ordenados
 #descententemente , no pide ni devuelve ningun valor.
@@ -40,6 +40,4 @@ def informes(lista_clientes, lista_restaurantes, lista_rappitenderos):
             elif opcion_elegida == 2:
                 mostrar_mejores_restaurantes_en_ventas(lista_restaurantes)                                
             opcion_elegida = devolver_opcion_elegida_validada_desde_lista(opciones)
-        imprimir_aviso_de_retorno_al_menu_anterior()
-    else:   
-        imprimir_aviso_de_retorno_al_menu_anterior()
+    imprimir_aviso_de_retorno_al_menu_anterior()

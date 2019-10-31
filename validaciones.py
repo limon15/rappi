@@ -53,8 +53,3 @@ def parentesis_balanceados(cadena):
 def restaurante_elegido_es_correcto(restaurantes, eleccion):
     revalidacion = "La eleccion elegida fue: {}. Si es correcto escriba 'si' de lo contrario escriba 'no': ".format(restaurantes[eleccion]['Nombre'])
     return True if revalidacion.upper() == 'SI' else False
-
-# print(parentesis_balanceados("(011)) 4293-6406"))
-
-# def validar_lat_long(latitud, longitud):
-    # return not bool(match('^[0-9.]{1,7}$', latitud)) or not bool(match('^[0-9.]{1,7}$', latitud))    

@@ -23,7 +23,14 @@ def calcular_importe_del_pedido(lista_platos, lista_pedidos):
                 importe_multiplicado = int(importe_unitario*cantidad)
         importe_total += importe_multiplicado
     return round(importe_total,2)
- 
+
+def calcular_importe_pedido_manual(platos_restaurante, lista_pedidos):
+    importe_total = 0
+    for i in range(len(lista_pedidos)):
+        plato = devolver_item_lista_entidad_segun_clave_valor(platos_restaurante, 'Nombre', lista_pedidos[i][1])
+        importe_total += float(plato['Precio'])*int(lista_pedidos[i][0])
+    return importe_total
+
 def actualizar_ganancias_rappitendero_cliente(importe_pedido, rappitendero, cliente):
     rappitendero['Propina acumulada'] += round(0.1*importe_pedido,2)
     if importe_pedido<200:
@@ -160,7 +167,7 @@ def pedido_manual(lista_clientes, lista_restaurantes, lista_rappitenderos):
     distancia = calcular_distancia(rappitendero_al_azar_actualizado['Posicion actual'], cliente['Posicion'])
     mostrar_tiempo_estimado(distancia)
     rappitendero_al_azar_actualizado = actualizar_posicion_pedido_rappitendero(posicion_cliente, pedido, rappitendero_al_azar_actualizado)
-    importe_total = calcular_importe_del_pedido(platos_restaurante, pedido['Pedido'])
+    importe_total = calcular_importe_pedido_manual(platos_restaurante, pedido['Pedido'])
     print("\n => El importe total a pagar es de: {}.".format(importe_total))
     rappitendero_al_azar_actualizado, cliente_actualizado = actualizar_ganancias_rappitendero_cliente(importe_total, rappitendero_al_azar_actualizado, cliente)
     print("\n => El pedido ya fue recibido en su domicilio. Usted ganó {} rappicreditos por la compra.".format(cliente_actualizado['Rappicreditos']))

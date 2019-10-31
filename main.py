@@ -1,9 +1,9 @@
-from cargar_data import *
+from common import devolver_opcion_elegida_validada_desde_lista
 from informes import informes
 from pedidos import pedido_manual
 from simulaciones import simulacion_de_pedidos
-from prettytable import *
-
+from prettytable import PrettyTable, ALL
+from cargar_data import carga_manual, cargar_predefinida
 
 def imprimir_titulo_seccion(seccion):
     t = PrettyTable(['{}'.format(seccion.upper())])

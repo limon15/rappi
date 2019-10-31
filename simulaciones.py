@@ -1,8 +1,7 @@
+from prettytable import PrettyTable
+from pedidos import calcular_importe_del_pedido_manual, actualizar_posicion_pedido_rappitendero, actualizar_ganancias_rappitendero_cliente, actualizar_ventas_restaurante, pedir_variedad_max_platos
 from random import choice, randint, randrange
 from common import validar_opcion_ingresada, evaluar_informacion_suficiente, imprimir_aviso_de_retorno_al_menu_anterior, imprimir_aviso_de_retorno_al_menu_anterior
-from prettytable import PrettyTable
-from pedidos import *
-# from pedidos import pedir_variedad_max_platos, calcular_importe_del_pedido, actualizar_posicion_pedido_rappitendero, actualizar_ganancias_rappitendero_cliente
 
 # Funcion que elige un valor al azar de una lista de diccionarios e imprime un breve detalle del valor obtenido en base a la clave proporcionada.
 def obtener_valor_al_azar_de_lista_de_dic(lista, contenido, clave):
@@ -36,7 +35,7 @@ def simulacion_de_pedidos(lista_clientes, lista_restaurantes, lista_rappitendero
     informacion_suficiente = evaluar_informacion_suficiente(lista_clientes, lista_restaurantes, lista_rappitenderos)
     if informacion_suficiente :
         cantidad_simulaciones = pedir_cantidad_simulaciones()
-        variedad_max_platos = pedir_variedad_max_platos()
+        variedad_max_platos = pedir_variedad_max_platos(1,10)
         for i in range(cantidad_simulaciones):   
             cliente_al_azar = obtener_valor_al_azar_de_lista_de_dic(lista_clientes, "cliente", "Nombre de usuario")
             restaurante_al_azar = obtener_valor_al_azar_de_lista_de_dic(lista_restaurantes, "restaurante", "Nombre")
@@ -45,7 +44,7 @@ def simulacion_de_pedidos(lista_clientes, lista_restaurantes, lista_rappitendero
             lista_platos = restaurante_al_azar['Platos'][:variedad_platos]
             lista_pedidos_aleatorios = generar_lista_pedidos_aleatorios(lista_platos)
             pedido = {'Pedido': lista_pedidos_aleatorios, 'Cliente': cliente_al_azar}
-            importe_total = calcular_importe_del_pedido(lista_platos, lista_pedidos_aleatorios)
+            importe_total = calcular_importe_del_pedido_manual(lista_platos, lista_pedidos_aleatorios)
             rappitendero_al_azar = obtener_valor_al_azar_de_lista_de_dic(lista_rappitenderos, "rappitendero", "Nombre")
             posicion_cliente = cliente_al_azar['Posicion']
             rappitendero_al_azar_actualizado = actualizar_posicion_pedido_rappitendero(posicion_cliente, pedido, rappitendero_al_azar)
