@@ -2,6 +2,7 @@ from re import match
 from validaciones import *
 from prettytable import PrettyTable
 from random import choice
+from common import devolver_opcion_elegida_validada_desde_lista, listar_opciones, imprimir_aviso_de_retorno_al_menu_anterior
 
 # Constantes de inputs:
 
@@ -12,7 +13,7 @@ msg_telefono = "Ingrese un telefono: "
 msg_latitud = "Ingrese la latitud de la direccion: "
 msg_longitud = "Ingrese la longitud de la direccion: "
 msg_radio_de_entrega = "Ingrese el radio de entrega del restaurante (en KM): "
-msg_usuario = "Ingrese un nombre de usuario (numeros y/o letras sin espacios) o aprete * para volver atras: "
+msg_usuario = "Ingrese un nombre de usuario (numeros y/o letras sin espacios sin distincion de mayusculas) o aprete * para volver atras: "
 msg_contraseña = "Ingrese una contraseña: "
 
 
@@ -24,7 +25,7 @@ def obtener_reporte_de_carga(cant_inicial, cant_final, cant_fallados, entidad):
     # return print("\nREPORTE: \n - Antes de la carga había {1} {0}. \n - Se cargaron {2} nuevos. \n - Fallaron {3} porque el nombre se encontraba entre los ya existentes \n - Ahora hay {4} {0} cargados.".format(entidad, cant_inicial, cant_nuevos, cant_fallados, cant_final))
 
 # Data harcodeada: 
-def cargar_restaurantes(lista_restaurantes=[]):
+def cargar_restaurantes_predefinidos(lista_restaurantes=[]):
     cant_inicial = len(lista_restaurantes)
     cant_fallados = 0
     restaurantes = [
@@ -47,15 +48,15 @@ def cargar_restaurantes(lista_restaurantes=[]):
 
 # print(cargar_restaurantes([]))
 
-def cargar_clientes(lista_clientes=[]):
+def cargar_clientes_predefinidos(lista_clientes=[]):
     cant_inicial = len(lista_clientes)
     cant_fallados = 0
     clientes = [
-        {'Nombre de usuario': 'LUCIA MARCHESANO', 'Contraseña': 'buonabitacolo31', 'Telefono': '011 4214-7576', 'Direccion': 'Erezcano 1576, Adrogue, Buenos aires', 'Posicion': (-34.802668, -58.375369), 'Rappicreditos': 0},
-        {'Nombre de usuario': 'ANA MARIA GASPARUTTI', 'Contraseña': 'nuncioyana2019', 'Telefono': '011 4214-7576', 'Direccion': 'Av. Espora 200, Adrogué, Buenos aires', 'Posicion': (-34.788542, -58.389000), 'Rappicreditos': 0},
-        {'Nombre de usuario': 'TERO MARTIGNETTI', 'Contraseña': 'onlyfood17', 'Telefono': '011 4293-6406', 'Direccion': 'King 725, José Mármol, Buenos aires', 'Posicion': (-34.789540, -58.373989), 'Rappicreditos': 0},
-        {'Nombre de usuario': 'RAUL GARCIA', 'Contraseña': 'radiopasion1929', 'Telefono': '011 4293-1833', 'Direccion': 'Benigno Macias 443, Adrogue, Buenos aires', 'Posicion': (-34.797054, -58.391627), 'Rappicreditos': 0},
-        {'Nombre de usuario': 'HORTENCIA CISTERNA', 'Contraseña': 'lamuniloca', 'Telefono': '011 4294-3936', 'Direccion': 'Cerretti 876, Adrogue, Buenos aires', 'Posicion': (-34.799099, -58.386906), 'Rappicreditos': 0}
+        {'Nombre de usuario': 'LUCHIA31', 'Contraseña': 'buonabitacolo31', 'Telefono': '011 4214-7576', 'Direccion': 'Erezcano 1576, Adrogue, Buenos aires', 'Posicion': (-34.802668, -58.375369), 'Rappicreditos': 0},
+        {'Nombre de usuario': '2019AMARIAG', 'Contraseña': 'nuncioyana2019', 'Telefono': '011 4214-7576', 'Direccion': 'Av. Espora 200, Adrogué, Buenos aires', 'Posicion': (-34.788542, -58.389000), 'Rappicreditos': 0},
+        {'Nombre de usuario': 'BESTCATEVER', 'Contraseña': 'onlyfood17', 'Telefono': '011 4293-6406', 'Direccion': 'King 725, José Mármol, Buenos aires', 'Posicion': (-34.789540, -58.373989), 'Rappicreditos': 0},
+        {'Nombre de usuario': 'RAULO1', 'Contraseña': 'radiopasion1929', 'Telefono': '011 4293-1833', 'Direccion': 'Benigno Macias 443, Adrogue, Buenos aires', 'Posicion': (-34.797054, -58.391627), 'Rappicreditos': 0},
+        {'Nombre de usuario': 'FLEQUI26', 'Contraseña': 'lamuniloca', 'Telefono': '011 4294-3936', 'Direccion': 'Cerretti 876, Adrogue, Buenos aires', 'Posicion': (-34.799099, -58.386906), 'Rappicreditos': 0}
         ]
     if (cant_inicial!=0):
         for dic in clientes:
@@ -69,7 +70,7 @@ def cargar_clientes(lista_clientes=[]):
     obtener_reporte_de_carga(cant_inicial, cant_final, cant_fallados, 'clientes')      
     return lista_clientes
 
-def cargar_rappitenderos(lista_rappitenderos=[]):
+def cargar_rappitenderos_predefinidos(lista_rappitenderos=[]):
     cant_inicial = len(lista_rappitenderos)
     cant_fallados = 0
     rappitenderos = [
@@ -126,7 +127,7 @@ def cargar_nuevo_restaurante(lista_restaurantes=[]):
 
 def cargar_nuevo_plato():
     lista_de_platos = []
-    nombre = input(msg_nombre)
+    nombre = input(f'\tmsg_nombre')
     while nombre!='*':
         if (no_existe_en_lista(nombre, 'Nombre', lista_de_platos) and nombre_tiene_formato_valido(nombre) and tiene_longitud_valida(nombre, 5, 25)):
             precio = input(msg_precio)
@@ -185,4 +186,51 @@ def cargar_nuevo_rappitendero(lista_restaurantes=[]):
         print("Aun no se han cargado restaurantes. El rappitendero no puede ser creado.")         
     return lista_rappitenderos
 
-# print(cargar_nuevo_rappitendero())
+def evaluar_existencia_restaurantes(lista_restaurantes):
+    existen_restaurantes = False if len(lista_restaurantes) == 0 else True
+    if not existen_restaurantes:
+        print("\nNo hay restaurantes cargados. Pruebe cargando datos de restaurantes previamente.\n")    
+    return existen_restaurantes
+
+def validar_eleccion_restaurante(eleccion, lista_restaurantes):
+    validar_eleccion = input("Le eleccion elegida fue: {}. Si es correcto escriba 'si' de lo contrario escriba 'no': ".format(lista_restaurantes[eleccion]['Nombre']))
+    return True if validar_eleccion.upper() == 'SI' else False
+
+def actualizar_platos_restaurante(lista_restaurantes):
+    existen_restaurantes = evaluar_existencia_restaurantes(lista_restaurantes)
+    if existen_restaurantes:
+        opcion_validada = False
+        while not opcion_validada:
+            print("\tElija el restaurante para el cual desea cargar el plato:\n")     
+            nombres_restaurantes = [dic['Nombre'] for dic in lista_restaurantes]
+            opcion_elegida = devolver_opcion_elegida_validada_desde_lista(nombres_restaurantes)
+            opcion_validada = validar_eleccion_restaurante(opcion_elegida, lista_restaurantes)
+        lista_restaurantes[opcion_elegida]['Platos'].extend(cargar_nuevo_plato())
+    imprimir_aviso_de_retorno_al_menu_anterior()
+    return lista_restaurantes
+
+def carga_manual(lista_clientes, lista_restaurantes, lista_rappitenderos):
+    opciones = ["Cargar un nuevo restaurante.",  "Cargar un nuevo plato.", "Cargar un nuevo cliente.", "Cargar un nuevo rappitendero.", "Volver al menu anterior."]
+    tabulacion = 2
+    opcion_elegida = devolver_opcion_elegida_validada_desde_lista(opciones, tabulacion)
+    volver = len(opciones)-1    
+    while opcion_elegida != volver:
+        if (opcion_elegida == 0):
+            lista_restaurantes = cargar_nuevo_restaurante(lista_restaurantes)     
+        elif (opcion_elegida == 1):
+            lista_restaurantes = actualizar_platos_restaurante(lista_restaurantes)
+        elif (opcion_elegida == 2):
+            lista_clientes = cargar_nuevo_cliente(lista_clientes)                     
+        elif (opcion_elegida == 3):
+            lista_rappitenderos = cargar_nuevo_rappitendero(lista_rappitenderos) 
+        opcion_elegida = devolver_opcion_elegida_validada_desde_lista(opciones, tabulacion)
+    imprimir_aviso_de_retorno_al_menu_anterior()
+    return lista_clientes, lista_restaurantes, lista_rappitenderos 
+
+
+def cargar_predefinida(lista_clientes=[], lista_restaurantes=[], lista_rappitenderos=[]):
+    lista_clientes = cargar_clientes_predefinidos(lista_clientes)
+    lista_restaurantes = cargar_restaurantes_predefinidos(lista_restaurantes)
+    lista_rappitenderos = cargar_rappitenderos_predefinidos(lista_rappitenderos)
+    imprimir_aviso_de_retorno_al_menu_anterior()
+    return lista_clientes, lista_restaurantes, lista_rappitenderos

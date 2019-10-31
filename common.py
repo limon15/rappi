@@ -1,5 +1,7 @@
 # msg_eleccion = "La eleccion elegida fue: {}. Si es correcto escriba 'si' de lo contrario escriba 'no': ".format(restaurantes[eleccion]['Nombre'])
-from prettytable import PrettyTable
+# from prettytable import PrettyTable
+from prettytable import *
+
 
 def pedir_numero_entero():
     correcto = False
@@ -21,7 +23,6 @@ def evaluar_informacion_suficiente(lista_clientes, lista_restaurantes, lista_rap
         print("\nNo hay suficiente información para ejecutar esta opción, pruebe cargando datos de clientes, restaurantes y rappitenderos previamente.\n")    
     return info_suficiente
 
-
 # Función que recibe la opción ingresada, verifica si es un número y luego
 #evalúa si el número está en el rango de opciones válidas mostradas en pantalla.
 # Devuelve un string con SI en caso de ser una opcion válida, caso contrario devuelve NO.
@@ -34,27 +35,32 @@ def validar_opcion_ingresada(opcion, opcion_maxima, opcion_minima=0):
     return opcion_correcta
 
 def imprimir_aviso_de_retorno_al_menu_anterior():
-    print("\n<------------Redirigiéndolo al menú anterior.")
+    print("\n<------------Redirigiéndolo al menú anterior.\n")
 
-def solicitar_ingreso_de_opcion():
-    opcion = input("\n\t\tElija una opción para continuar: ")
+def solicitar_ingreso_de_opcion(tabs=0):
+    opcion = input("\n{}Elija una opción para continuar: ".format('\t'*tabs))
     return opcion
 
 # Función que solo muestra opciones, no pide ni devuelve ningun valor.
-def listar_opciones(lista_opciones):
+def listar_opciones(lista_opciones, tabs=0):
+    # print("\n")
     for i, o in enumerate(lista_opciones):
-        print("\t\t",i, "-", o)    
+        print("\t"*tabs, i, "-", o)    
 
 # Función que devuelve el número entero de la opción elegida del submenú informes.
-def devolver_opcion_elegida_validada_desde_lista(lista_opciones):
+def devolver_opcion_elegida_validada_desde_lista(lista_opciones, tabs=0):
     opcion_valida = False
     while not opcion_valida:
-        listar_opciones(lista_opciones)
-        opcion_elegida = solicitar_ingreso_de_opcion()
+        listar_opciones(lista_opciones, tabs)
+        opcion_elegida = solicitar_ingreso_de_opcion(tabs)
         opcion_valida = validar_opcion_ingresada(opcion_elegida, len(lista_opciones)-1)
     return int(opcion_elegida)
 
-def imprimir_titulo_seccion(seccion):
-    print("\n--------------------{}--------------------\n".format(seccion.upper()))
-    #  t = PrettyTable(['{}'.format(seccion.upper())])
-    #  print (t)
+def devolver_item_lista_entidad_segun_clave_valor(entidad, clave, valor):
+    item = ''
+    i=0
+    while i<len(entidad) and item == '':
+        item = entidad[i] if entidad[i][clave] == valor else ''
+        i+=1
+    return item
+# imprimir_titulo_seccion("SIMULACIONES")    
