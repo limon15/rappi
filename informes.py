@@ -1,5 +1,4 @@
 from common import *
-# from common import evaluar_informacion_suficiente, validar_opcion_ingresada, imprimir_aviso_de_retorno_al_menu_anterior, listar_opciones, solicitar_ingreso_de_opcion
 
 # Función que solo muestra los restaurantes de mayor total de ventas ordenados
 #descententemente , no pide ni devuelve ningun valor.

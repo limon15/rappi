@@ -1,6 +1,8 @@
 from common import validar_opcion_ingresada, obtener_lista_nombres_restaurantes, devolver_opcion_elegida_validada_desde_lista, devolver_item_lista_entidad_segun_clave_valor, evaluar_existencia_entidad, imprimir_aviso_de_retorno_al_menu_anterior
 from validaciones import no_existe_en_lista, alertar_error
-from cargar_data import validar_nombre_eleccion_entidad
+from cargar_data import validar_nombre_eleccion_entidad, PrettyTable
+from simulaciones import obtener_valor_al_azar_de_lista_de_dic, actualizar_item_lista_entidad
+
 # Función que muestra los platos enumerados, con su precio, del restaurante elegido.
 #Se muestra platos de la siguiente forma: 1,2...,n. Amentando en 1 la vista de la posición
 #original del plato en la lista de platos.
@@ -32,8 +34,8 @@ def actualizar_ganancias_rappitendero_cliente(importe_pedido, rappitendero, clie
         cliente['Rappicreditos'] += round(0.2*importe_pedido,2)
     return rappitendero, cliente      
 
-def actualizar_posicion_pedido_rappitendero(posicion_cliente, pedido, rappitendero):
-    rappitendero['Posicion actual'] = posicion_cliente
+def actualizar_posicion_pedido_rappitendero(posicion_nueva, pedido, rappitendero):
+    rappitendero['Posicion actual'] = posicion_nueva
     rappitendero['Pedido'] = pedido
     return rappitendero
 
@@ -91,7 +93,7 @@ def solicitar_cantidad_platos(nombre_plato, valor_min=1, valor_max=10):
     return int(cant_platos)
 
 def continuar_pidiendo():
-    continuar_pedido = input("¿Desea continuar pidiendo? Ingrese 'si' o cualquier otro caracter para salir: ").upper()
+    continuar_pedido = input("¿Desea continuar pidiendo en el mismo restaurante? Ingrese 'si' o cualquier otro caracter para salir: ").upper()
     return True if continuar_pedido.upper() == 'SI' else False
 
 def actualizar_pedido(lista_pedidos, cant_platos, nombre_plato):
@@ -102,6 +104,26 @@ def actualizar_pedido(lista_pedidos, cant_platos, nombre_plato):
         lista_pedidos = [(int(cant_platos)+int(c), nombre_plato) if (n == nombre_plato) else (c, n) for (c, n) in lista_pedidos]
     return lista_pedidos
 
+def generar_reporte_pedido(pedido):
+    t = PrettyTable(['CANT. PLATOS', 'PLATOS'])
+    for i in range(len(pedido['Pedido'])):
+        t.add_row([pedido['Pedido'][i][0], pedido['Pedido'][i][1]])
+    print(t)
+
+# Función que recibe el origen y destino, para devolver la distancia que recorrerá el rappitendero.
+def calcular_distancia(pos_restaurante, pos_cliente):
+    a = (pos_restaurante[0] - pos_cliente[0] ) ** 2
+    b = (pos_restaurante[1] - pos_cliente[1] ) ** 2
+    distancia = 100 * ( (a + b) ** (1/2) )
+    return distancia
+
+# Función que solamente muestra en pantalla el tiempo estimado de entrega del pedido,
+#siendo el origen del rappitendero en el restaurante hasta su destino.
+def mostrar_tiempo_estimado(distancia):
+    velocidad_rappi = 15
+    hora_estimada = distancia / velocidad_rappi
+    minutos_estimados = hora_estimada * 60
+    print("\n => El tiempo estimado de entrega será de {0:.2} minutos.\n".format(minutos_estimados))
 
 def pedido_manual(lista_clientes, lista_restaurantes, lista_rappitenderos):
     existen_clientes = evaluar_existencia_entidad(lista_clientes, 'clientes')
@@ -109,7 +131,7 @@ def pedido_manual(lista_clientes, lista_restaurantes, lista_rappitenderos):
         cliente = iniciar_sesion_cliente(lista_clientes)
         eleccion_restaurante_valida = False
         continuar_pedido = True
-        pedidos = {'Pedido': [], 'Cliente': cliente }
+        pedido = { 'Pedido': [], 'Cliente': cliente }
         while continuar_pedido:
             while not eleccion_restaurante_valida:
                 print("\nEstos son los restaurantes disponibles en tu zona:\n")
@@ -120,71 +142,32 @@ def pedido_manual(lista_clientes, lista_restaurantes, lista_rappitenderos):
             eleccion_platos_valida = False    
             while not eleccion_platos_valida:
                 print("\nEstos son los platos disponibles del restaurante '{}':\n".format(restaurante['Nombre']))
+                platos_restaurante = restaurante['Platos']
                 lista_platos = obtener_lista_de_platos(restaurante)
-                # print(lista_platos)
                 indice_plato = devolver_opcion_elegida_validada_desde_lista(lista_platos, 3)
-                # print(indice_plato)
-                eleccion_platos_valida = validar_nombre_eleccion_entidad(indice_plato, restaurante['Platos'])
-            nombre_plato =  restaurante['Platos'][indice_plato]['Nombre']
+                eleccion_platos_valida = validar_nombre_eleccion_entidad(indice_plato, platos_restaurante)
+            nombre_plato =  platos_restaurante[indice_plato]['Nombre']
             cant_plato = solicitar_cantidad_platos(nombre_plato, 1, 10)
-            # pedido = (cant_plato, nombre_plato)
-            # print(pedido)
-            pedidos['Pedido'] = actualizar_pedido(pedidos['Pedido'], cant_plato, nombre_plato)
-            print(pedidos)
+            pedido['Pedido'] = actualizar_pedido(pedido['Pedido'], cant_plato, nombre_plato)
             continuar_pedido = continuar_pidiendo()
-    print(pedidos)     
-    imprimir_aviso_de_retorno_al_menu_anterior()   
-
-
-# pedido_manual()
-#     while len(nombre_pedido) < 1 :
-#         nombre_pedido = input("Nombre en blanco. Por favor ingrese un nombre: ")
-        
-#     return nombre_pedido   
-
-#     usuario = input(msg_usuario)
-#     while usuario!='*':
-
-
-
-# def iniciar_sesion(dic_clientes):
-    
-#     nombre_ingresado = pedir_nombre()
-#     nombre_encontrado = buscar_nombre(nombre_ingresado,dic_clientes)
-    
-#     if nombre_encontrado == "NO":
-#         print("Nombre no encontrado. ")
-#     seguir_pidiendo_nombre = "SI"
-    
-#     while (nombre_encontrado == "NO") and (seguir_pidiendo_nombre == "SI"):
-#         nombre_ingresado = pedir_nombre()
-#         nombre_encontrado = buscar_nombre(nombre_ingresado,dic_clientes)
-#         if nombre_encontrado == "NO":
-#             print("Nombre no encontrado. ")
-#             seguir_pidiendo_nombre = desea_seguir("Desea seguir intentando ingresar el nombre?")
-    
-#     if nombre_encontrado == "SI":
-#         contraseña_ingresada = pedir_contraseña()
-#         contraseña_encontrada = buscar_contraseña(nombre_ingresado, contraseña_ingresada, dic_clientes)
-#         if contraseña_encontrada == "NO":
-#             print("Contraseña incorrecta. ")
-            
-#         seguir_pidiendo_contraseña = "SI"
-        
-#         while (contraseña_encontrada == "NO") and (seguir_pidiendo_contraseña == "SI"):
-#             contraseña_ingresada = pedir_contraseña()
-#             contraseña_encontrada = buscar_contraseña(nombre_ingresado, contraseña_ingresada, dic_clientes)
-#             if contraseña_encontrada == "NO":
-#                 seguir_pidiendo_contraseña = desea_seguir("Desea seguir intentando ingresar la contraseña?")
-    
-#     if nombre_encontrado == "SI" and contraseña_encontrada == "SI":
-#         print(f"Te damos la bienvenida {nombre_ingresado}")
-#         print("")
-#         datos_usuario = devolver_datos_usuario(nombre_ingresado, contraseña_ingresada, dic_clientes)
-        
-#         return datos_usuario
-    
-#     else:
-#         print("No se pudo iniciar sesión.")
-    
-#         return -1
+    print("\nEste es su pedido:\n")
+    generar_reporte_pedido(pedido)   
+    rappitendero_al_azar = obtener_valor_al_azar_de_lista_de_dic(lista_rappitenderos, "rappitendero", "Nombre")
+    posicion_restaurante = restaurante['Posicion']
+    rappitendero_al_azar_actualizado = actualizar_posicion_pedido_rappitendero(posicion_restaurante, pedido, rappitendero_al_azar)
+    posicion_cliente = cliente['Posicion']  
+    print("\n => El pedido será entregado a la dirección: {}".format(cliente['Direccion']))      
+    distancia = calcular_distancia(rappitendero_al_azar_actualizado['Posicion actual'], cliente['Posicion'])
+    mostrar_tiempo_estimado(distancia)
+    rappitendero_al_azar_actualizado = actualizar_posicion_pedido_rappitendero(posicion_cliente, pedido, rappitendero_al_azar_actualizado)
+    importe_total = calcular_importe_del_pedido(platos_restaurante, pedido['Pedido'])
+    print("\n => El importe total a pagar es de: {}.".format(importe_total))
+    rappitendero_al_azar_actualizado, cliente_actualizado = actualizar_ganancias_rappitendero_cliente(importe_total, rappitendero_al_azar_actualizado, cliente)
+    print("\n => El pedido ya fue recibido en su domicilio. Usted ganó {} rappicreditos por la compra.".format(cliente_actualizado['Rappicreditos']))
+    restaurante_actualizado = actualizar_ventas_restaurante(importe_total, restaurante) 
+    lista_clientes = actualizar_item_lista_entidad(lista_clientes, cliente, cliente_actualizado)
+    lista_restaurantes = actualizar_item_lista_entidad(lista_restaurantes, restaurante, restaurante_actualizado)
+    lista_rappitenderos = actualizar_item_lista_entidad(lista_rappitenderos, rappitendero_al_azar, rappitendero_al_azar_actualizado)
+    print("\n Se cerrará su sesión.\n Hasta luego, vuelva pronto ☺.")      
+    imprimir_aviso_de_retorno_al_menu_anterior()
+    return lista_clientes  

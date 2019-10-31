@@ -22,7 +22,6 @@ def obtener_reporte_de_carga(cant_inicial, cant_final, cant_fallados, entidad):
     t = PrettyTable(['CANT. INICIAL', 'CANT. FINAL', 'CANT. NUEVOS', 'CANT. FALLADOS*'])
     t.add_row([cant_inicial, cant_final, cant_nuevos, cant_fallados])
     return print("REPORTE DE CARGA DE {}: \n{}{}\n".format(entidad.upper(), t, "\n* El nombre a cargar se encontraba entre los ya existentes" if cant_fallados>0 else ''))
-    # return print("\nREPORTE: \n - Antes de la carga había {1} {0}. \n - Se cargaron {2} nuevos. \n - Fallaron {3} porque el nombre se encontraba entre los ya existentes \n - Ahora hay {4} {0} cargados.".format(entidad, cant_inicial, cant_nuevos, cant_fallados, cant_final))
 
 # Data harcodeada: 
 def cargar_restaurantes_predefinidos(lista_restaurantes=[]):
@@ -46,7 +45,6 @@ def cargar_restaurantes_predefinidos(lista_restaurantes=[]):
     obtener_reporte_de_carga(cant_inicial, cant_final, cant_fallados, 'restaurantes')
     return lista_restaurantes
 
-# print(cargar_restaurantes([]))
 
 def cargar_clientes_predefinidos(lista_clientes=[]):
     cant_inicial = len(lista_clientes)
@@ -176,7 +174,6 @@ def cargar_nuevo_rappitendero(lista_restaurantes=[]):
         nombre = input(msg_nombre)
         while nombre!='*':
             if (nombre_tiene_formato_valido(nombre)):            
-                # print(choice(lista_restaurantes))
                 posicion_actual = choice(lista_restaurantes)['Posicion actual']
                 lista_rappitenderos.append({'Nombre': nombre.upper(), 'Propina acumulada': 0.0, 'Posicion actual': posicion_actual, 'Pedido actual': None})
             else:

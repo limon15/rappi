@@ -2,6 +2,7 @@ from random import choice, randint, randrange
 from common import validar_opcion_ingresada, evaluar_informacion_suficiente, imprimir_aviso_de_retorno_al_menu_anterior, imprimir_aviso_de_retorno_al_menu_anterior
 from prettytable import PrettyTable
 from pedidos import *
+# from pedidos import pedir_variedad_max_platos, calcular_importe_del_pedido, actualizar_posicion_pedido_rappitendero, actualizar_ganancias_rappitendero_cliente
 
 # Funcion que elige un valor al azar de una lista de diccionarios e imprime un breve detalle del valor obtenido en base a la clave proporcionada.
 def obtener_valor_al_azar_de_lista_de_dic(lista, contenido, clave):
@@ -29,7 +30,6 @@ def actualizar_item_lista_entidad(entidad, elem_anterior, elem_nuevo):
     entidad.append(elem_nuevo)
     return entidad
 
-
 # Función encargarda de simular una cantidad n de pedidos. Actualizará los datos de
 #usuarios, restaurantes y rappitenderos correspondientes. Al finalizar vuelve al menú principal.
 def simulacion_de_pedidos(lista_clientes, lista_restaurantes, lista_rappitenderos):
@@ -54,8 +54,6 @@ def simulacion_de_pedidos(lista_clientes, lista_restaurantes, lista_rappitendero
         lista_clientes = actualizar_item_lista_entidad(lista_clientes, cliente_al_azar, cliente_al_azar_actualizado)
         lista_restaurantes = actualizar_item_lista_entidad(lista_restaurantes, restaurante_al_azar, restaurante_al_azar_actualizado)
         lista_rappitenderos = actualizar_item_lista_entidad(lista_rappitenderos, rappitendero_al_azar, rappitendero_al_azar_actualizado)
-        imprimir_aviso_de_retorno_al_menu_anterior()    
-    else:
-        imprimir_aviso_de_retorno_al_menu_anterior()    
+    imprimir_aviso_de_retorno_al_menu_anterior()    
     return lista_clientes, lista_restaurantes, lista_rappitenderos
       
