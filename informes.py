@@ -31,7 +31,7 @@ def informes(lista_clientes, lista_restaurantes, lista_rappitenderos):
     informacion_suficiente = evaluar_informacion_suficiente(lista_clientes, lista_restaurantes, lista_rappitenderos)
     if informacion_suficiente:
         opciones = ['Clientes con mayor Rappicreditos', 'Rappitenderos con mayor propina acumulada', 'Restaurantes que mas ventas tuvieron', 'Volver al menú principal']
-        opcion_informes_elegida = devolver_opcion_elegida_validada(opciones)
+        opcion_informes_elegida = devolver_opcion_elegida_validada_desde_lista(opciones)
         volver = len(opciones)-1
         while opcion_informes_elegida != volver :
             if opcion_informes_elegida == 0:
@@ -40,7 +40,7 @@ def informes(lista_clientes, lista_restaurantes, lista_rappitenderos):
                 mostrar_rappitenderos_mayor_propina(lista_rappitenderos)
             elif opcion_informes_elegida == 2:
                 mostrar_mejores_restaurantes_en_ventas(lista_restaurantes)                                
-            opcion_informes_elegida = devolver_opcion_elegida_validada(opciones)
+            opcion_informes_elegida = devolver_opcion_elegida_validada_desde_lista(opciones)
         imprimir_aviso_de_retorno_al_menu_anterior()
     else:   
         imprimir_aviso_de_retorno_al_menu_anterior()

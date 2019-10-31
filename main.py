@@ -1,6 +1,7 @@
 from cargar_data import *
 from common import pedir_numero_entero
 from informes import informes
+from simulaciones import simulacion_de_pedidos
 
 
 def menu():
@@ -55,7 +56,7 @@ def menu():
         elif (opcion == 3):
             print("Opcion 3")
         elif (opcion == 4):
-            print("Opcion 4")
+            clientes, restaurantes, rappitenderos = simulacion_de_pedidos(clientes, restaurantes, rappitenderos)
         elif (opcion == 5):
             informes(clientes, restaurantes, rappitenderos)
         elif (opcion == 6):
