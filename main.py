@@ -1,7 +1,9 @@
 from cargar_data import *
 from informes import informes
+from pedidos import pedido_manual
 from simulaciones import simulacion_de_pedidos
 from prettytable import *
+
 
 def imprimir_titulo_seccion(seccion):
     t = PrettyTable(['{}'.format(seccion.upper())])
@@ -41,7 +43,7 @@ def menu():
             clientes, restaurantes, rappitenderos = carga_manual(clientes, restaurantes, rappitenderos)
         elif (opcion_elegida == 2):
             imprimir_titulo_seccion("pedido manual")
-            print("Opcion 3")
+            pedido_manual(clientes, restaurantes, rappitenderos)
         elif (opcion_elegida == 3):
             imprimir_titulo_seccion("simulaciones")
             clientes, restaurantes, rappitenderos = simulacion_de_pedidos(clientes, restaurantes, rappitenderos)

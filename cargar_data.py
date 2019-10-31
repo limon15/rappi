@@ -2,7 +2,7 @@ from re import match
 from validaciones import *
 from prettytable import PrettyTable
 from random import choice
-from common import devolver_opcion_elegida_validada_desde_lista, listar_opciones, imprimir_aviso_de_retorno_al_menu_anterior
+from common import devolver_opcion_elegida_validada_desde_lista, listar_opciones, imprimir_aviso_de_retorno_al_menu_anterior, obtener_lista_nombres_restaurantes, evaluar_existencia_entidad
 
 # Constantes de inputs:
 
@@ -52,11 +52,11 @@ def cargar_clientes_predefinidos(lista_clientes=[]):
     cant_inicial = len(lista_clientes)
     cant_fallados = 0
     clientes = [
-        {'Nombre de usuario': 'LUCHIA31', 'Contraseña': 'buonabitacolo31', 'Telefono': '011 4214-7576', 'Direccion': 'Erezcano 1576, Adrogue, Buenos aires', 'Posicion': (-34.802668, -58.375369), 'Rappicreditos': 0},
-        {'Nombre de usuario': '2019AMARIAG', 'Contraseña': 'nuncioyana2019', 'Telefono': '011 4214-7576', 'Direccion': 'Av. Espora 200, Adrogué, Buenos aires', 'Posicion': (-34.788542, -58.389000), 'Rappicreditos': 0},
-        {'Nombre de usuario': 'BESTCATEVER', 'Contraseña': 'onlyfood17', 'Telefono': '011 4293-6406', 'Direccion': 'King 725, José Mármol, Buenos aires', 'Posicion': (-34.789540, -58.373989), 'Rappicreditos': 0},
-        {'Nombre de usuario': 'RAULO1', 'Contraseña': 'radiopasion1929', 'Telefono': '011 4293-1833', 'Direccion': 'Benigno Macias 443, Adrogue, Buenos aires', 'Posicion': (-34.797054, -58.391627), 'Rappicreditos': 0},
-        {'Nombre de usuario': 'FLEQUI26', 'Contraseña': 'lamuniloca', 'Telefono': '011 4294-3936', 'Direccion': 'Cerretti 876, Adrogue, Buenos aires', 'Posicion': (-34.799099, -58.386906), 'Rappicreditos': 0}
+        {'Nombre de usuario': 'LUCHIA31', 'Contraseña': 'Buonabitacolo31!', 'Telefono': '011 4214-7576', 'Direccion': 'Erezcano 1576, Adrogue, Buenos aires', 'Posicion': (-34.802668, -58.375369), 'Rappicreditos': 0},
+        {'Nombre de usuario': '2019AMARIAG', 'Contraseña': 'nuncioYana2019?', 'Telefono': '011 4214-7576', 'Direccion': 'Av. Espora 200, Adrogué, Buenos aires', 'Posicion': (-34.788542, -58.389000), 'Rappicreditos': 0},
+        {'Nombre de usuario': 'BESTCATEVER', 'Contraseña': '#onlyFood17', 'Telefono': '011 4293-6406', 'Direccion': 'King 725, José Mármol, Buenos aires', 'Posicion': (-34.789540, -58.373989), 'Rappicreditos': 0},
+        {'Nombre de usuario': 'RAULO1', 'Contraseña': 'Radiopa$ion1929', 'Telefono': '011 4293-1833', 'Direccion': 'Benigno Macias 443, Adrogue, Buenos aires', 'Posicion': (-34.797054, -58.391627), 'Rappicreditos': 0},
+        {'Nombre de usuario': 'FLEQUI26', 'Contraseña': 'lamunil*CA1', 'Telefono': '011 4294-3936', 'Direccion': 'Cerretti 876, Adrogue, Buenos aires', 'Posicion': (-34.799099, -58.386906), 'Rappicreditos': 0}
         ]
     if (cant_inicial!=0):
         for dic in clientes:
@@ -186,25 +186,19 @@ def cargar_nuevo_rappitendero(lista_restaurantes=[]):
         print("Aun no se han cargado restaurantes. El rappitendero no puede ser creado.")         
     return lista_rappitenderos
 
-def evaluar_existencia_restaurantes(lista_restaurantes):
-    existen_restaurantes = False if len(lista_restaurantes) == 0 else True
-    if not existen_restaurantes:
-        print("\nNo hay restaurantes cargados. Pruebe cargando datos de restaurantes previamente.\n")    
-    return existen_restaurantes
-
-def validar_eleccion_restaurante(eleccion, lista_restaurantes):
-    validar_eleccion = input("Le eleccion elegida fue: {}. Si es correcto escriba 'si' de lo contrario escriba 'no': ".format(lista_restaurantes[eleccion]['Nombre']))
+def validar_nombre_eleccion_entidad(eleccion, entidad):
+    validar_eleccion = input("La elección realizada fue '{}'. Si es correcto ingrese 'si' o ingrese cualquier caracter para volver: ".format(entidad[eleccion]['Nombre']))
     return True if validar_eleccion.upper() == 'SI' else False
 
 def actualizar_platos_restaurante(lista_restaurantes):
-    existen_restaurantes = evaluar_existencia_restaurantes(lista_restaurantes)
+    existen_restaurantes = evaluar_existencia_entidad(lista_restaurantes)
     if existen_restaurantes:
         opcion_validada = False
         while not opcion_validada:
             print("\tElija el restaurante para el cual desea cargar el plato:\n")     
-            nombres_restaurantes = [dic['Nombre'] for dic in lista_restaurantes]
+            nombres_restaurantes = obtener_lista_nombres_restaurantes(lista_restaurantes)
             opcion_elegida = devolver_opcion_elegida_validada_desde_lista(nombres_restaurantes)
-            opcion_validada = validar_eleccion_restaurante(opcion_elegida, lista_restaurantes)
+            opcion_validada = validar_nombre_eleccion_entidad(opcion_elegida, lista_restaurantes)
         lista_restaurantes[opcion_elegida]['Platos'].extend(cargar_nuevo_plato())
     imprimir_aviso_de_retorno_al_menu_anterior()
     return lista_restaurantes

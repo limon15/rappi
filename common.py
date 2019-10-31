@@ -64,3 +64,18 @@ def devolver_item_lista_entidad_segun_clave_valor(entidad, clave, valor):
         i+=1
     return item
 # imprimir_titulo_seccion("SIMULACIONES")    
+
+def obtener_lista_nombres_restaurantes(lista_restaurantes):
+    nombres_restaurantes = [dic['Nombre'] for dic in lista_restaurantes]
+    return nombres_restaurantes
+    # platos = []
+    # limit = len(restaurant_elegido['Platos']) if limit==0 else limit
+    # for i in range(limit):      
+    #     platos.append(f"{restaurant_elegido['Platos'][i]['Nombre']} - ${restaurant_elegido['Platos'][i]['Precio']}")
+    # return platos  
+
+def evaluar_existencia_entidad(entidad, nombre_entidad):
+    existencia_entidad = False if len(entidad) == 0 else True
+    if not existencia_entidad:
+        print("\nNo hay {0} cargados. Pruebe cargando datos de {0} previamente.\n".format(nombre_entidad))    
+    return existencia_entidad
