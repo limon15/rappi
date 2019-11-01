@@ -10,7 +10,7 @@ def obtener_lista_de_platos(restaurant_elegido, limit=0):
     platos = []
     limit = len(restaurant_elegido['Platos']) if limit==0 else limit
     for i in range(limit):      
-        platos.append(f"{restaurant_elegido['Platos'][i]['Nombre']} - ${restaurant_elegido['Platos'][i]['Precio']}")
+        platos.append(f"{restaurant_elegido['Platos'][i]['Nombre'].upper()} - ${restaurant_elegido['Platos'][i]['Precio']}")
     return platos
 
 # def calcular_importe_del_pedido(lista_platos, lista_pedidos):
@@ -104,12 +104,6 @@ def actualizar_pedido(lista_pedidos, cant_platos, nombre_plato):
         lista_pedidos = [(int(cant_platos)+int(c), nombre_plato) if (n == nombre_plato) else (c, n) for (c, n) in lista_pedidos]
     return lista_pedidos
 
-def generar_reporte(pedido):
-    t = PrettyTable(['CANT. PLATOS', 'PLATOS'])
-    for i in range(len(pedido['Pedido'])):
-        t.add_row([pedido['Pedido'][i][0], pedido['Pedido'][i][1]])
-    print(t)
-
 # Función que recibe el origen y destino, para devolver la distancia que recorrerá el rappitendero.
 def calcular_distancia(pos_restaurante, pos_cliente):
     a = (pos_restaurante[0] - pos_cliente[0] ) ** 2
@@ -123,7 +117,7 @@ def mostrar_tiempo_estimado(distancia):
     velocidad_rappi = 15
     hora_estimada = distancia / velocidad_rappi
     minutos_estimados = hora_estimada * 60
-    print("\n => El tiempo estimado de entrega será de {0:.2} minutos.\n".format(minutos_estimados))
+    print("\n => El tiempo estimado de entrega será de {0:.2} minutos.".format(minutos_estimados))
 
 def generar_reporte_pedido(pedido):
     t = PrettyTable(['CANT. PLATOS', 'PLATOS'])

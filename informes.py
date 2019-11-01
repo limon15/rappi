@@ -1,42 +1,20 @@
 from common import evaluar_informacion_suficiente, devolver_opcion_elegida_validada_desde_lista, imprimir_aviso_de_retorno_al_menu_anterior, PrettyTable
 
-# Función que solo muestra los restaurantes de mayor total de ventas ordenados
-#descententemente , no pide ni devuelve ningun valor.
-def mostrar_mejores_restaurantes_en_ventas(lista_restaurantes):
-    dic_aux = sorted(lista_restaurantes, key = lambda x: x['Total de ventas'], reverse=True)
-    for i in range(0, len(lista_restaurantes)):
-        print(f"El restaurante {dic_aux[i]['Nombre']} tiene $ {dic_aux[i]['Total de ventas']} como total de ventas.")
 
-# Función que solo muestra los clientes de mayor rappicréditos ordenados
-#descententemente , no pide ni devuelve ningun valor.
-def mostrar_clientes_mayor_rappicreditos(lista_clientes):
-    list_sorted = reordenar_lista_de_dicc_por_valor(lista_clientes, 'Rappicreditos', True)
-
-
-    dic_aux = sorted(lista_clientes, key = lambda x: x['Rappicreditos'], reverse=True)
-    i = 0
-    while i < len(dic_aux) and i<10:
-        print(f"-> El cliente {dic_aux[i]['Nombre de usuario']} tiene {dic_aux[i]['Rappicreditos']} rappicréditos.")
-        i+=1
-
-# Función que solo muestra los rappitenderos de mayor propina ordenados
-#descententemente , no pide ni devuelve ningun valor.
-def mostrar_rappitenderos_mayor_propina(lista_rappitenderos):
-    dic_aux = sorted(lista_rappitenderos, key = lambda x: x['Propina acumulada'], reverse=True)
-    i=0
-    while i < len(dic_aux) and i<10:
-        print(f"El rappitendero {dic_aux[i]['Nombre']} tiene $ {dic_aux[i]['Propina acumulada']} de propina acumulada.")
-        i+=1 
+# Función que ordena asc/desc una lista de diccionario de acuerdo al valor de una clave y genera un reporte del top pedido
+def mostrar_top_entidad_segun_clave_valor(lista_clientes, limit, col_to_order, id_col):
+    list_sorted = reordenar_lista_de_dicc_por_valor(lista_clientes, col_to_order, True)
+    generar_reporte_top(list_sorted, limit, id_col, col_to_order)
 
 def reordenar_lista_de_dicc_por_valor(lista, clave, reverse=False):
     lista_sorted = sorted(lista, key = lambda x: x[clave], reverse=reverse)
     return lista_sorted
 
-def generar_reporte_top_diez(lista, col1, col2):
+def generar_reporte_top(lista, limit, col1, col2):
     t = PrettyTable([col1, col2])
     i=0
-    while i < len(lista) and i<10:
-        t.add_row(lista[i][col1], lista[i][col2])
+    while i < len(lista) and i<limit:
+        t.add_row([lista[i][col1], lista[i][col2]])
         i+=1
     print(t)
 
@@ -49,12 +27,16 @@ def informes(lista_clientes, lista_restaurantes, lista_rappitenderos):
         volver = len(opciones)-1
         while opcion_elegida != volver :
             if opcion_elegida == 0:
-
-
-                mostrar_clientes_mayor_rappicreditos(lista_clientes)
+                print("\nEstos son los clientes con mayor Rappicreditos: \n")
+                mostrar_top_entidad_segun_clave_valor(lista_clientes, 5, "Rappicreditos", "Nombre de usuario")
+                imprimir_aviso_de_retorno_al_menu_anterior()
             elif opcion_elegida == 1:
-                mostrar_rappitenderos_mayor_propina(lista_rappitenderos)
+                print("\nEstos son los rappitenderos con mayor propina acumulada: \n")
+                mostrar_top_entidad_segun_clave_valor(lista_rappitenderos, 5, "Propina acumulada", "Nombre") 
+                imprimir_aviso_de_retorno_al_menu_anterior()                                   
             elif opcion_elegida == 2:
-                mostrar_mejores_restaurantes_en_ventas(lista_restaurantes)                                
-            opcion_elegida = devolver_opcion_elegida_validada_desde_lista(opciones)
+                print("\nEstos son los restaurantes que más ventas tuvieron: \n")                 
+                mostrar_top_entidad_segun_clave_valor(lista_restaurantes, 5, "Total de ventas", "Nombre")
+                imprimir_aviso_de_retorno_al_menu_anterior()                                              
+            opcion_elegida = devolver_opcion_elegida_validada_desde_lista(opciones, 2)
     imprimir_aviso_de_retorno_al_menu_anterior()

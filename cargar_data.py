@@ -90,8 +90,15 @@ def cargar_rappitenderos_predefinidos(lista_rappitenderos=[]):
     obtener_reporte_de_carga(cant_inicial, cant_final, cant_fallados, 'rappitenderos')         
     return lista_rappitenderos
 
+def imprimir_titulo_submenu(entidad):
+    print("\n||   ALTA DE {}   ||\n".format(entidad).upper())   
+
+def notificar_carga_exitosa(entidad, id):
+    print("\nLa carga del {} '{}' se ha realizado correctamente\n".format(entidad, id))   
+
 # Cargar 
 def cargar_nuevo_restaurante(lista_restaurantes=[]):
+    imprimir_titulo_submenu("restaurante")
     nombre = input(msg_nombre)
     while nombre!='*':
         if (no_existe_en_lista(nombre, 'Nombre', lista_restaurantes) and nombre_tiene_formato_valido(nombre) and tiene_longitud_valida(nombre, 5, 25)):
@@ -117,15 +124,18 @@ def cargar_nuevo_restaurante(lista_restaurantes=[]):
                 radio_de_entrega = input(msg_radio_de_entrega)
             print("Ingrese los platos del restaurante '{}': ".format(nombre))    
             platos = cargar_nuevo_plato()
-            lista_restaurantes.append({'Nombre': nombre.upper(), 'Direccion': direccion, 'Telefono': telefono, 'Posicion': (float(latitud), float(longitud)), 'Radio de entrega': radio_de_entrega, 'Platos': platos, 'Total de ventas': 0.0, 'Moneda': 'ARG'})            
+            lista_restaurantes.append({'Nombre': nombre.upper(), 'Direccion': direccion, 'Telefono': telefono, 'Posicion': (float(latitud), float(longitud)), 'Radio de entrega': radio_de_entrega, 'Platos': platos, 'Total de ventas': 0.0, 'Moneda': 'ARG'})
+            notificar_carga_exitosa("restaurante", nombre)   
         else:
             alertar_error("nombre", "\n a) Coincide con un restaurante existente. \n b) Tiene una longitud indebida (permitido entre 5 y 25 caracteres).")
         nombre = input(msg_nombre)
+    imprimir_aviso_de_retorno_al_menu_anterior()
     return lista_restaurantes   
 
 def cargar_nuevo_plato():
     lista_de_platos = []
-    nombre = input(f'\tmsg_nombre')
+    imprimir_titulo_submenu("plato")
+    nombre = input(msg_nombre)
     while nombre!='*':
         if (no_existe_en_lista(nombre, 'Nombre', lista_de_platos) and nombre_tiene_formato_valido(nombre) and tiene_longitud_valida(nombre, 5, 25)):
             precio = input(msg_precio)
@@ -133,12 +143,14 @@ def cargar_nuevo_plato():
                 alertar_error("precio", "\n a) No es un numero positivo. \n b) Tiene caracteres incorrectos para el indicio de decimal, utilice '.'. \n c) No se encuentra entre 0 y 9999.")           
                 precio = input(msg_precio)
             lista_de_platos.append({'Nombre': nombre.upper(), 'Precio': round(float(precio),2)})
+            notificar_carga_exitosa("plato", nombre)   
         else:
             alertar_error("nombre", "\n a) Coincide con un plato existente en el restaurante. \n b) Tiene una longitud indebida (permitido entre 5 y 25 caracteres).")
         nombre = input(msg_nombre)
     return lista_de_platos  
 
 def cargar_nuevo_cliente(lista_clientes=[]):
+    imprimir_titulo_submenu("clientes")
     usuario = input(msg_usuario)
     while usuario!='*':
         if (no_existe_en_lista(usuario, 'Nombre de usuario', lista_clientes) and usuario_tiene_formato_valido(usuario) and tiene_longitud_valida(usuario, 3, 12)):
@@ -163,24 +175,27 @@ def cargar_nuevo_cliente(lista_clientes=[]):
                 alertar_error("longitud", "Ingrese solo numeros entre -180 y 180 (decimales separados por '.').")
                 longitud = input(msg_longitud)
             lista_clientes.append({'Nombre de usuario': usuario.upper(), 'Contraseña': contraseña, 'Telefono': telefono, 'Direccion': direccion, 'Posicion': (float(latitud), float(longitud)), 'Rappicreditos': 0.0 })
+            notificar_carga_exitosa("cliente", usuario)       
         else:
             alertar_error("usuario", "\n a) Coincide con un cliente existente. \n b) Tiene una longitud indebida (permitido entre 3 y 12 caracteres) \n c) Contiene espacios.")
-        usuario = input(msg_usuario)         
+        usuario = input(msg_usuario)
+    imprimir_aviso_de_retorno_al_menu_anterior()
     return lista_clientes
 
-def cargar_nuevo_rappitendero(lista_restaurantes=[]):
-    lista_rappitenderos=[]
-    if (len(lista_restaurantes)!=0):
+def cargar_nuevo_rappitendero(lista_restaurantes=[], lista_rappitenderos=[]):
+    existen_restaurantes = evaluar_existencia_entidad(lista_restaurantes, "restaurantes")
+    if existen_restaurantes:
+        imprimir_titulo_submenu("rappitendero")
         nombre = input(msg_nombre)
         while nombre!='*':
             if (nombre_tiene_formato_valido(nombre)):            
                 posicion_actual = choice(lista_restaurantes)['Posicion actual']
                 lista_rappitenderos.append({'Nombre': nombre.upper(), 'Propina acumulada': 0.0, 'Posicion actual': posicion_actual, 'Pedido actual': None})
+                notificar_carga_exitosa("rappitendero", nombre)            
             else:
                 alertar_error("nombre", "\n a) No tiene un formato valido.")
-            nombre = input(msg_nombre)                          
-    else:
-        print("Aun no se han cargado restaurantes. El rappitendero no puede ser creado.")         
+            nombre = input(msg_nombre)
+    imprimir_aviso_de_retorno_al_menu_anterior()
     return lista_rappitenderos
 
 def validar_nombre_eleccion_entidad(eleccion, entidad):
@@ -192,9 +207,9 @@ def actualizar_platos_restaurante(lista_restaurantes):
     if existen_restaurantes:
         opcion_validada = False
         while not opcion_validada:
-            print("\tElija el restaurante para el cual desea cargar el plato:\n")     
+            print("\n\t\tElija el restaurante para el cual desea cargar el plato:\n")     
             nombres_restaurantes = obtener_lista_nombres_restaurantes(lista_restaurantes)
-            opcion_elegida = devolver_opcion_elegida_validada_desde_lista(nombres_restaurantes)
+            opcion_elegida = devolver_opcion_elegida_validada_desde_lista(nombres_restaurantes, 3)
             opcion_validada = validar_nombre_eleccion_entidad(opcion_elegida, lista_restaurantes)
         lista_restaurantes[opcion_elegida]['Platos'].extend(cargar_nuevo_plato())
     imprimir_aviso_de_retorno_al_menu_anterior()
