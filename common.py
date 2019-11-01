@@ -2,6 +2,12 @@
 # from prettytable import PrettyTable
 from prettytable import PrettyTable, ALL
 
+def pedir_variedad_max_platos(valor_min=1, valor_max=100):
+    opcion_valida = False
+    while not opcion_valida:
+        variedad_max_platos = input("Ingrese la cantidad máxima de platos por pedido deseada: ")
+        opcion_valida = validar_opcion_ingresada(variedad_max_platos, 100, 1)
+    return int(variedad_max_platos)
 
 def pedir_numero_entero():
     correcto = False

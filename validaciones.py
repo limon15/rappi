@@ -20,10 +20,10 @@ def direccion_tiene_formato_valido(direccion):
     return bool(match('^[A-Za-z0-9-_°, áéíóúÁÉÍÓÚñÑ]+$', direccion))
 
 def latitud_tiene_formato_valido(latitud):
-    return bool(match('^[+-]?(([1-8]?[0-9])(\.[0-9]{1,6})?|90(\.0{1,6})?)$', latitud))
+    return bool(match(r'^[+-]?(([1-8]?[0-9])(\.[0-9]{1,6})?|90(\.0{1,6})?)$', latitud))
 
 def longitud_tiene_formato_valido(longitud):
-    return bool(match('^[+-]?((([1-9]?[0-9]|1[0-7][0-9])(\.[0-9]{1,6})?)|180(\.0{1,6})?)$', longitud))
+    return bool(match(r'^[+-]?((([1-9]?[0-9]|1[0-7][0-9])(\.[0-9]{1,6})?)|180(\.0{1,6})?)$', longitud))
 
 def radio_de_entrega_tiene_formato_valido(radio_de_entrega):
     return bool(match('^[0-9]{1,2}([.])*([0-9]{1,2})*$', radio_de_entrega))

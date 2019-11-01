@@ -1,4 +1,4 @@
-from common import evaluar_informacion_suficiente, devolver_opcion_elegida_validada_desde_lista, imprimir_aviso_de_retorno_al_menu_anterior
+from common import evaluar_informacion_suficiente, devolver_opcion_elegida_validada_desde_lista, imprimir_aviso_de_retorno_al_menu_anterior, PrettyTable
 
 # Función que solo muestra los restaurantes de mayor total de ventas ordenados
 #descententemente , no pide ni devuelve ningun valor.
@@ -10,6 +10,9 @@ def mostrar_mejores_restaurantes_en_ventas(lista_restaurantes):
 # Función que solo muestra los clientes de mayor rappicréditos ordenados
 #descententemente , no pide ni devuelve ningun valor.
 def mostrar_clientes_mayor_rappicreditos(lista_clientes):
+    list_sorted = reordenar_lista_de_dicc_por_valor(lista_clientes, 'Rappicreditos', True)
+
+
     dic_aux = sorted(lista_clientes, key = lambda x: x['Rappicreditos'], reverse=True)
     i = 0
     while i < len(dic_aux) and i<10:
@@ -23,17 +26,31 @@ def mostrar_rappitenderos_mayor_propina(lista_rappitenderos):
     i=0
     while i < len(dic_aux) and i<10:
         print(f"El rappitendero {dic_aux[i]['Nombre']} tiene $ {dic_aux[i]['Propina acumulada']} de propina acumulada.")
-        i+=1  
+        i+=1 
+
+def reordenar_lista_de_dicc_por_valor(lista, clave, reverse=False):
+    lista_sorted = sorted(lista, key = lambda x: x[clave], reverse=reverse)
+    return lista_sorted
+
+def generar_reporte_top_diez(lista, col1, col2):
+    t = PrettyTable([col1, col2])
+    i=0
+    while i < len(lista) and i<10:
+        t.add_row(lista[i][col1], lista[i][col2])
+        i+=1
+    print(t)
 
 # Función encargada de mostrar algunas estadísticas de clientes, restaurantes y rappitenderos.
 def informes(lista_clientes, lista_restaurantes, lista_rappitenderos):
     informacion_suficiente = evaluar_informacion_suficiente(lista_clientes, lista_restaurantes, lista_rappitenderos)
     if informacion_suficiente:
         opciones = ['Clientes con mayor Rappicreditos', 'Rappitenderos con mayor propina acumulada', 'Restaurantes que mas ventas tuvieron', 'Volver al menú principal']
-        opcion_elegida = devolver_opcion_elegida_validada_desde_lista(opciones)
+        opcion_elegida = devolver_opcion_elegida_validada_desde_lista(opciones, 2)
         volver = len(opciones)-1
         while opcion_elegida != volver :
             if opcion_elegida == 0:
+
+
                 mostrar_clientes_mayor_rappicreditos(lista_clientes)
             elif opcion_elegida == 1:
                 mostrar_rappitenderos_mayor_propina(lista_rappitenderos)

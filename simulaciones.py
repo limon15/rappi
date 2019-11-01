@@ -1,7 +1,8 @@
 from prettytable import PrettyTable
-from pedidos import calcular_importe_del_pedido_manual, actualizar_posicion_pedido_rappitendero, actualizar_ganancias_rappitendero_cliente, actualizar_ventas_restaurante, pedir_variedad_max_platos
+# from pedidos import obtener_importe_pedido_manual, actualizar_posicion_pedido_rappitendero, actualizar_ganancias_rappitendero_cliente, actualizar_ventas_restaurante, pedir_variedad_max_platos
 from random import choice, randint, randrange
-from common import validar_opcion_ingresada, evaluar_informacion_suficiente, imprimir_aviso_de_retorno_al_menu_anterior, imprimir_aviso_de_retorno_al_menu_anterior
+from common import validar_opcion_ingresada, evaluar_informacion_suficiente, imprimir_aviso_de_retorno_al_menu_anterior, imprimir_aviso_de_retorno_al_menu_anterior, pedir_variedad_max_platos
+# from pedidos import *
 
 # Funcion que elige un valor al azar de una lista de diccionarios e imprime un breve detalle del valor obtenido en base a la clave proporcionada.
 def obtener_valor_al_azar_de_lista_de_dic(lista, contenido, clave):
@@ -36,7 +37,8 @@ def simulacion_de_pedidos(lista_clientes, lista_restaurantes, lista_rappitendero
     if informacion_suficiente :
         cantidad_simulaciones = pedir_cantidad_simulaciones()
         variedad_max_platos = pedir_variedad_max_platos(1,10)
-        for i in range(cantidad_simulaciones):   
+        i=0
+        while i < cantidad_simulaciones:   
             cliente_al_azar = obtener_valor_al_azar_de_lista_de_dic(lista_clientes, "cliente", "Nombre de usuario")
             restaurante_al_azar = obtener_valor_al_azar_de_lista_de_dic(lista_restaurantes, "restaurante", "Nombre")
             variedad_platos = randint(1, len(restaurante_al_azar['Platos'])) if variedad_max_platos>len(restaurante_al_azar['Platos']) else randint(1,variedad_max_platos)
@@ -44,12 +46,13 @@ def simulacion_de_pedidos(lista_clientes, lista_restaurantes, lista_rappitendero
             lista_platos = restaurante_al_azar['Platos'][:variedad_platos]
             lista_pedidos_aleatorios = generar_lista_pedidos_aleatorios(lista_platos)
             pedido = {'Pedido': lista_pedidos_aleatorios, 'Cliente': cliente_al_azar}
-            importe_total = calcular_importe_del_pedido_manual(lista_platos, lista_pedidos_aleatorios)
+            importe_total = obtener_importe_pedido_manual(lista_platos, lista_pedidos_aleatorios)
             rappitendero_al_azar = obtener_valor_al_azar_de_lista_de_dic(lista_rappitenderos, "rappitendero", "Nombre")
             posicion_cliente = cliente_al_azar['Posicion']
             rappitendero_al_azar_actualizado = actualizar_posicion_pedido_rappitendero(posicion_cliente, pedido, rappitendero_al_azar)
             rappitendero_al_azar_actualizado, cliente_al_azar_actualizado = actualizar_ganancias_rappitendero_cliente(importe_total, rappitendero_al_azar, cliente_al_azar)
             restaurante_al_azar_actualizado = actualizar_ventas_restaurante(importe_total, restaurante_al_azar)
+            i+=1
         lista_clientes = actualizar_item_lista_entidad(lista_clientes, cliente_al_azar, cliente_al_azar_actualizado)
         lista_restaurantes = actualizar_item_lista_entidad(lista_restaurantes, restaurante_al_azar, restaurante_al_azar_actualizado)
         lista_rappitenderos = actualizar_item_lista_entidad(lista_rappitenderos, rappitendero_al_azar, rappitendero_al_azar_actualizado)

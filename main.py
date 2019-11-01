@@ -1,3 +1,7 @@
+import sys
+# print(sys.path)
+sys.path.append('C:\\Users\\Claudio\\Downloads\\SOFIA\\7540_Algortimos_I\\TP1')
+
 from common import devolver_opcion_elegida_validada_desde_lista
 from informes import informes
 from pedidos import pedido_manual
