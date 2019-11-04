@@ -66,7 +66,7 @@ def generar_reporte_pedido(pedido):
 #----------------------------------------------------------------------------------
 
 # Función encargarda de simular una cantidad n de pedidos. Actualizará los datos de
-#usuarios, restaurantes y rappitenderos correspondientes. Al finalizar vuelve al menú principal.
+# usuarios, restaurantes y rappitenderos correspondientes. Al finalizar vuelve al menú principal.
 def simulacion_de_pedidos(lista_clientes, lista_restaurantes, lista_rappitenderos):
     informacion_suficiente = evaluar_informacion_suficiente(lista_clientes, lista_restaurantes, lista_rappitenderos)
     if informacion_suficiente :

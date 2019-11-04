@@ -1,5 +1,3 @@
-# msg_eleccion = "La eleccion elegida fue: {}. Si es correcto escriba 'si' de lo contrario escriba 'no': ".format(restaurantes[eleccion]['Nombre'])
-# from prettytable import PrettyTable
 from prettytable import PrettyTable, ALL
 
 def pedir_variedad_max_platos(valor_min=1, valor_max=100):
@@ -20,18 +18,12 @@ def pedir_numero_entero():
             print('Error. La opcion ingresada no es un numero entero.')
     return num
 
-# Función que recibe 3 diccionarios, evalúa si tienen información dentro, en caso de que los 3 estén cargados
-#va a devolver que la información suficiente es "SI", en caso de que algún diccionario esté vacío, devolverá que
-#la información suficiente es "NO".
 def evaluar_informacion_suficiente(lista_clientes, lista_restaurantes, lista_rappitenderos):
     info_suficiente = False if (len(lista_clientes) == 0 or len(lista_restaurantes) == 0 or len(lista_rappitenderos) == 0) else True
     if not info_suficiente:
         print("\nNo hay suficiente información para ejecutar esta opción, pruebe cargando datos de clientes, restaurantes y rappitenderos previamente.\n")    
     return info_suficiente
 
-# Función que recibe la opción ingresada, verifica si es un número y luego
-#evalúa si el número está en el rango de opciones válidas mostradas en pantalla.
-# Devuelve un string con SI en caso de ser una opcion válida, caso contrario devuelve NO.
 def validar_opcion_ingresada(opcion, opcion_maxima, opcion_minima=0):
     if (opcion.isdigit() and opcion_minima<=int(opcion)<=opcion_maxima):
         opcion_correcta = True
