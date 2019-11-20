@@ -7,17 +7,6 @@ def pedir_variedad_max_platos(valor_min=1, valor_max=100):
         opcion_valida = validar_opcion_ingresada(variedad_max_platos, 100, 1)
     return int(variedad_max_platos)
 
-def pedir_numero_entero():
-    correcto = False
-    num = 0
-    while(not correcto):
-        try:
-            num = int(input("Introduce un numero entero referido a las opciones del menu: "))
-            correcto = True
-        except ValueError:
-            print('Error. La opcion ingresada no es un numero entero.')
-    return num
-
 def evaluar_informacion_suficiente(lista_clientes, lista_restaurantes, lista_rappitenderos):
     info_suficiente = False if (len(lista_clientes) == 0 or len(lista_restaurantes) == 0 or len(lista_rappitenderos) == 0) else True
     if not info_suficiente:

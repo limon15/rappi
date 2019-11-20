@@ -1,20 +1,12 @@
 from common import evaluar_informacion_suficiente, devolver_opcion_elegida_validada_desde_lista, imprimir_aviso_de_retorno_al_menu_anterior, PrettyTable
 
 
-# Función que ordena asc/desc una lista de diccionario de acuerdo al valor de una clave y genera un reporte del top pedido
-def mostrar_top_entidad_segun_clave_valor(lista_clientes, limit, col_to_order, id_col):
-    list_sorted = reordenar_lista_de_dicc_por_valor(lista_clientes, col_to_order, True)
-    generar_reporte_top(list_sorted, limit, id_col, col_to_order)
-
-def reordenar_lista_de_dicc_por_valor(lista, clave, reverse=False):
-    lista_sorted = sorted(lista, key = lambda x: x[clave], reverse=reverse)
-    return lista_sorted
-
-def generar_reporte_top(lista, limit, col1, col2):
-    t = PrettyTable([col1, col2])
+def mostrar_top_entidad_segun_clave_valor(lista, limit, col_to_order, id_col):
+    list_sorted = sorted(lista, key = lambda x: x[col_to_order], reverse=True)
+    t = PrettyTable([id_col, col_to_order])
     i=0
-    while i < len(lista) and i<limit:
-        t.add_row([lista[i][col1], lista[i][col2]])
+    while i < len(list_sorted) and i<limit:
+        t.add_row([list_sorted[i][id_col], list_sorted[i][col_to_order]])
         i+=1
     print(t)
 
