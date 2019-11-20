@@ -1,8 +1,6 @@
 from prettytable import PrettyTable
-# from pedidos import obtener_importe_pedido_manual, actualizar_posicion_pedido_rappitendero, actualizar_ganancias_rappitendero_cliente, actualizar_ventas_restaurante, pedir_variedad_max_platos
 from random import choice, randint, randrange
 from common import validar_opcion_ingresada, evaluar_informacion_suficiente, imprimir_aviso_de_retorno_al_menu_anterior, imprimir_aviso_de_retorno_al_menu_anterior, pedir_variedad_max_platos, devolver_item_lista_entidad_segun_clave_valor
-# from pedidos import *
 
 # Funcion que elige un valor al azar de una lista de diccionarios e imprime un breve detalle del valor obtenido en base a la clave proporcionada.
 def obtener_valor_al_azar_de_lista_de_dic(lista, contenido, clave):
@@ -15,7 +13,7 @@ def obtener_valor_al_azar_de_lista_de_dic(lista, contenido, clave):
 def pedir_cantidad_simulaciones(valor_min=1, valor_max=100):
     opcion_valida = False
     while not opcion_valida:
-        cantidad_simulaciones = input("Ingrese la cantidad de simulaciones que quiere realizar números entre {} y {}: ".format(valor_min,valor_max))
+        cantidad_simulaciones = input("Ingrese la cantidad de simulaciones que quiere realizar números (entre {} y {}): ".format(valor_min,valor_max))
         opcion_valida = validar_opcion_ingresada(cantidad_simulaciones, valor_max, valor_min)
     return int(cantidad_simulaciones)
 
@@ -84,7 +82,7 @@ def simulacion_de_pedidos(lista_clientes, lista_restaurantes, lista_rappitendero
             pedido = {'Pedido': lista_pedidos_aleatorios, 'Cliente': cliente_al_azar}
             generar_reporte_pedido(pedido)
             importe_total = obtener_importe_pedido_manual(lista_platos, lista_pedidos_aleatorios)
-            print("\n => El importe total del pedido es de: {}.".format(importe_total))
+            print("\n => El importe total del pedido es de: ${}.".format(importe_total))
             rappitendero_al_azar = obtener_valor_al_azar_de_lista_de_dic(lista_rappitenderos, "rappitendero", "Nombre")
             posicion_cliente = cliente_al_azar['Posicion']
             rappitendero_al_azar_actualizado = actualizar_posicion_pedido_rappitendero(posicion_cliente, pedido, rappitendero_al_azar)

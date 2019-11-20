@@ -96,32 +96,67 @@ def imprimir_titulo_submenu(entidad):
 def notificar_carga_exitosa(entidad, id):
     print("\nLa carga del {} '{}' se ha realizado correctamente\n".format(entidad, id))   
 
+
+def pedir_direccion():
+    direccion = input(msg_direccion)
+    while not direccion_tiene_formato_valido(direccion):
+        direccion = input(msg_direccion)
+        alertar_error("direccion", "El valor ingresado no debe ser vacio.")
+    return direccion
+
+def pedir_telefono():
+    telefono = input(msg_telefono)
+    while not (telefono_tiene_formato_valido(telefono) and parentesis_balanceados(telefono)):
+        alertar_error("telefono", "Ingrese solo numeros, espacios, guiones, '+' y parentesis.")
+        telefono = input(msg_telefono)
+    return telefono
+
+def pedir_latitud():
+    latitud = input(msg_latitud)
+    while not latitud_tiene_formato_valido(latitud):
+        alertar_error("latitud", "Ingrese solo numeros entre -90 y 90 (decimales separados por '.').")
+        latitud = input(msg_latitud)
+    return latitud
+
+def pedir_longitud():
+    longitud = input(msg_longitud)            
+    while not longitud_tiene_formato_valido(longitud):
+        alertar_error("longitud", "Ingrese solo numeros entre -180 y 180 (decimales separados por '.').")
+        longitud = input(msg_longitud)
+    return longitud
+
+def pedir_radio_de_entrega():
+    radio_de_entrega = input(msg_radio_de_entrega)
+    while not radio_de_entrega_tiene_formato_valido(radio_de_entrega):
+        alertar_error("radio de entrega", "Ingrese solo numeros positivos (decimales separados por '.').")
+        radio_de_entrega = input(msg_radio_de_entrega)
+    return radio_de_entrega
+
+def pedir_contraseña():
+    contraseña = input(msg_contraseña)
+    while not contraseña_tiene_formato_valido(contraseña):
+        alertar_error("contraseña", "Debe tener 8 caracteres con al menos un digito, una mayuscula, una minuscula y un caracter especial.")            
+        contraseña = input(msg_contraseña)
+    return contraseña
+
+def pedir_precio():
+    precio = input(msg_precio)
+    while not precio_tiene_formato_valido(precio):
+        alertar_error("precio", "\n a) No es un numero positivo. \n b) Tiene caracteres incorrectos para el indicio de decimal, utilice '.'. \n c) No se encuentra entre 0 y 9999.")           
+        precio = input(msg_precio)
+    return precio
+    
 # Cargar 
 def cargar_nuevo_restaurante(lista_restaurantes=[]):
     imprimir_titulo_submenu("restaurante")
     nombre = input(msg_nombre)
     while nombre!='*':
         if (no_existe_en_lista(nombre, 'Nombre', lista_restaurantes) and nombre_tiene_formato_valido(nombre) and tiene_longitud_valida(nombre, 5, 25)):
-            direccion = input(msg_direccion)
-            while not direccion_tiene_formato_valido(direccion):
-                alertar_error("direccion", "El valor ingresado no debe ser vacio.")
-                direccion = input(msg_direccion)
-            telefono = input(msg_telefono)
-            while not (telefono_tiene_formato_valido(telefono) and parentesis_balanceados(telefono)):
-                alertar_error("telefono", "Ingrese solo numeros, espacios, guiones, '+' y parentesis.")
-                telefono = input(msg_telefono)
-            latitud = input(msg_latitud)
-            while not latitud_tiene_formato_valido(latitud):
-                alertar_error("latitud", "Ingrese solo numeros entre -90 y 90 (decimales separados por '.').")
-                latitud = input(msg_latitud)
-            longitud = input(msg_longitud)            
-            while not longitud_tiene_formato_valido(longitud):
-                alertar_error("longitud", "Ingrese solo numeros entre -180 y 180 (decimales separados por '.').")
-                longitud = input(msg_longitud)
-            radio_de_entrega = input(msg_radio_de_entrega)
-            while not radio_de_entrega_tiene_formato_valido(radio_de_entrega):
-                alertar_error("radio de entrega", "Ingrese solo numeros positivos (decimales separados por '.').")
-                radio_de_entrega = input(msg_radio_de_entrega)
+            direccion = pedir_direccion()
+            telefono = pedir_telefono()
+            latitud = pedir_latitud()
+            longitud = pedir_longitud()
+            radio_de_entrega = pedir_radio_de_entrega()
             print("Ingrese los platos del restaurante '{}': ".format(nombre))    
             platos = cargar_nuevo_plato()
             lista_restaurantes.append({'Nombre': nombre.upper(), 'Direccion': direccion, 'Telefono': telefono, 'Posicion': (float(latitud), float(longitud)), 'Radio de entrega': radio_de_entrega, 'Platos': platos, 'Total de ventas': 0.0, 'Moneda': 'ARG'})
@@ -138,10 +173,7 @@ def cargar_nuevo_plato():
     nombre = input(msg_nombre)
     while nombre!='*':
         if (no_existe_en_lista(nombre, 'Nombre', lista_de_platos) and nombre_tiene_formato_valido(nombre) and tiene_longitud_valida(nombre, 5, 25)):
-            precio = input(msg_precio)
-            while not precio_tiene_formato_valido(precio):
-                alertar_error("precio", "\n a) No es un numero positivo. \n b) Tiene caracteres incorrectos para el indicio de decimal, utilice '.'. \n c) No se encuentra entre 0 y 9999.")           
-                precio = input(msg_precio)
+            precio = pedir_precio()
             lista_de_platos.append({'Nombre': nombre.upper(), 'Precio': round(float(precio),2)})
             notificar_carga_exitosa("plato", nombre)   
         else:
@@ -154,26 +186,11 @@ def cargar_nuevo_cliente(lista_clientes=[]):
     usuario = input(msg_usuario)
     while usuario!='*':
         if (no_existe_en_lista(usuario, 'Nombre de usuario', lista_clientes) and usuario_tiene_formato_valido(usuario) and tiene_longitud_valida(usuario, 3, 12)):
-            contraseña = input(msg_contraseña)
-            while not contraseña_tiene_formato_valido(contraseña):
-                alertar_error("contraseña", "Debe tener 8 caracteres con al menos un digito, una mayuscula, una minuscula y un caracter especial.")            
-                contraseña = input(msg_contraseña)
-            telefono = input(msg_telefono)
-            while not (telefono_tiene_formato_valido(telefono) and parentesis_balanceados(telefono)):
-                alertar_error("telefono", "Ingrese solo numeros, espacios, guiones, '+' y parentesis.")
-                telefono = input(msg_telefono)
-            direccion = input(msg_direccion)                
-            while not direccion_tiene_formato_valido(direccion):
-                alertar_error("direccion", "El valor ingresado no debe ser vacio.")
-                direccion = input(msg_direccion)                
-            latitud = input(msg_latitud)
-            while not latitud_tiene_formato_valido(latitud):
-                alertar_error("latitud", "Ingrese solo numeros entre -90 y 90 (decimales separados por '.').")
-                latitud = input(msg_latitud)
-            longitud = input(msg_longitud)            
-            while not longitud_tiene_formato_valido(longitud):
-                alertar_error("longitud", "Ingrese solo numeros entre -180 y 180 (decimales separados por '.').")
-                longitud = input(msg_longitud)
+            contraseña = pedir_contraseña()
+            telefono = pedir_telefono()
+            direccion = pedir_direccion()
+            latitud = pedir_latitud()
+            longitud = pedir_latitud()
             lista_clientes.append({'Nombre de usuario': usuario.upper(), 'Contraseña': contraseña, 'Telefono': telefono, 'Direccion': direccion, 'Posicion': (float(latitud), float(longitud)), 'Rappicreditos': 0.0 })
             notificar_carga_exitosa("cliente", usuario)       
         else:
