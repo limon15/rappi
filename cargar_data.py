@@ -145,7 +145,7 @@ def pedir_precio():
         alertar_error("precio", "\n a) No es un numero positivo. \n b) Tiene caracteres incorrectos para el indicio de decimal, utilice '.'. \n c) No se encuentra entre 0 y 9999.")           
         precio = input(msg_precio)
     return precio
-    
+
 # Cargar 
 def cargar_nuevo_restaurante(lista_restaurantes=[]):
     imprimir_titulo_submenu("restaurante")
@@ -216,7 +216,7 @@ def cargar_nuevo_rappitendero(lista_restaurantes=[], lista_rappitenderos=[]):
     return lista_rappitenderos
 
 def validar_nombre_eleccion_entidad(eleccion, entidad):
-    validar_eleccion = input("La elección realizada fue '{}'. Si es correcto ingrese 'si' o ingrese cualquier caracter para volver: ".format(entidad[eleccion]['Nombre']))
+    validar_eleccion = input("La elección realizada fue '{}'. Si es correcto ingrese 'si' o ingrese cualquier caracter para volver: ".format(entidad[eleccion]['Nombre'].upper()))
     return True if validar_eleccion.upper() == 'SI' else False
 
 def actualizar_platos_restaurante(lista_restaurantes):

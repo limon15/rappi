@@ -114,49 +114,62 @@ def generar_reporte_pedido(pedido):
         t.add_row([pedido['Pedido'][i][0], pedido['Pedido'][i][1]])
     print(t)
 
+def elegir_restaurante(lista_restaurantes):
+    eleccion_restaurante_valida = False
+    while not eleccion_restaurante_valida:
+        print("\nEstos son los restaurantes disponibles en tu zona:\n")
+        nombres_restaurantes = obtener_lista_nombres_restaurantes(lista_restaurantes)
+        indice_restaurante = devolver_opcion_elegida_validada_desde_lista(nombres_restaurantes, 2)
+        eleccion_restaurante_valida = validar_nombre_eleccion_entidad(indice_restaurante, lista_restaurantes)
+    restaurante = lista_restaurantes[indice_restaurante]
+    return restaurante
+
+def elegir_plato(restaurante):
+    eleccion_platos_valida = False    
+    while not eleccion_platos_valida:
+        print("\nEstos son los platos disponibles del restaurante '{}':\n".format(restaurante['Nombre']))
+        platos_restaurante = restaurante['Platos']
+        lista_platos = obtener_lista_de_platos(restaurante)
+        indice_plato = devolver_opcion_elegida_validada_desde_lista(lista_platos, 3)
+        eleccion_platos_valida = validar_nombre_eleccion_entidad(indice_plato, platos_restaurante)
+    nombre_plato =  platos_restaurante[indice_plato]['Nombre']
+    return nombre_plato
+
+def procesar_pedido_manual(pedido, cliente, restaurante, lista_clientes, lista_restaurantes, lista_rappitenderos):
+    print("\nEste es su pedido:\n")
+    generar_reporte_pedido(pedido)   
+    rappitendero_al_azar = obtener_valor_al_azar_de_lista_de_dic(lista_rappitenderos, "rappitendero", "Nombre")
+    posicion_restaurante = restaurante['Posicion']
+    rappitendero_al_azar_actualizado = actualizar_posicion_pedido_rappitendero(posicion_restaurante, pedido, rappitendero_al_azar)
+    posicion_cliente = cliente['Posicion']  
+    print("\n => El pedido será entregado a la dirección: {}".format(cliente['Direccion']))      
+    distancia = calcular_distancia(rappitendero_al_azar_actualizado['Posicion actual'], cliente['Posicion'])
+    mostrar_tiempo_estimado(distancia)
+    rappitendero_al_azar_actualizado = actualizar_posicion_pedido_rappitendero(posicion_cliente, pedido, rappitendero_al_azar_actualizado)
+    platos_restaurante = restaurante['Platos']   
+    importe_total = obtener_importe_pedido_manual(platos_restaurante, pedido['Pedido'])
+    print("\n => El importe total a pagar es de: ${}.".format(importe_total))
+    rappitendero_al_azar_actualizado, cliente_actualizado = actualizar_ganancias_rappitendero_cliente(importe_total, rappitendero_al_azar_actualizado, cliente)
+    print("\n => El pedido ya fue recibido en su domicilio. Usted ganó {} rappicreditos por la compra.".format(cliente_actualizado['Rappicreditos']))
+    restaurante_actualizado = actualizar_ventas_restaurante(importe_total, restaurante) 
+    lista_clientes = actualizar_item_lista_entidad(lista_clientes, cliente, cliente_actualizado)
+    lista_restaurantes = actualizar_item_lista_entidad(lista_restaurantes, restaurante, restaurante_actualizado)
+    lista_rappitenderos = actualizar_item_lista_entidad(lista_rappitenderos, rappitendero_al_azar, rappitendero_al_azar_actualizado)
+    print("\n Se cerrará su sesión.\n Hasta luego, vuelva pronto ☺.")
+    return lista_clientes, lista_restaurantes, lista_rappitenderos
+
 def pedido_manual(lista_clientes, lista_restaurantes, lista_rappitenderos):
     existen_clientes = evaluar_existencia_entidad(lista_clientes, 'clientes')
     if existen_clientes:
         cliente = iniciar_sesion_cliente(lista_clientes)
-        eleccion_restaurante_valida = False
         continuar_pedido = True
         pedido = { 'Pedido': [], 'Cliente': cliente }
+        restaurante = elegir_restaurante(lista_restaurantes)
         while continuar_pedido:
-            while not eleccion_restaurante_valida:
-                print("\nEstos son los restaurantes disponibles en tu zona:\n")
-                nombres_restaurantes = obtener_lista_nombres_restaurantes(lista_restaurantes)
-                indice_restaurante = devolver_opcion_elegida_validada_desde_lista(nombres_restaurantes, 2)
-                eleccion_restaurante_valida = validar_nombre_eleccion_entidad(indice_restaurante, lista_restaurantes)
-            restaurante = lista_restaurantes[indice_restaurante]
-            eleccion_platos_valida = False    
-            while not eleccion_platos_valida:
-                print("\nEstos son los platos disponibles del restaurante '{}':\n".format(restaurante['Nombre']))
-                platos_restaurante = restaurante['Platos']
-                lista_platos = obtener_lista_de_platos(restaurante)
-                indice_plato = devolver_opcion_elegida_validada_desde_lista(lista_platos, 3)
-                eleccion_platos_valida = validar_nombre_eleccion_entidad(indice_plato, platos_restaurante)
-            nombre_plato =  platos_restaurante[indice_plato]['Nombre']
+            nombre_plato = elegir_plato(restaurante)
             cant_plato = solicitar_cantidad_platos(nombre_plato, 1, 10)
             pedido['Pedido'] = actualizar_pedido(pedido['Pedido'], cant_plato, nombre_plato)
             continuar_pedido = continuar_pidiendo()
-        print("\nEste es su pedido:\n")
-        generar_reporte_pedido(pedido)   
-        rappitendero_al_azar = obtener_valor_al_azar_de_lista_de_dic(lista_rappitenderos, "rappitendero", "Nombre")
-        posicion_restaurante = restaurante['Posicion']
-        rappitendero_al_azar_actualizado = actualizar_posicion_pedido_rappitendero(posicion_restaurante, pedido, rappitendero_al_azar)
-        posicion_cliente = cliente['Posicion']  
-        print("\n => El pedido será entregado a la dirección: {}".format(cliente['Direccion']))      
-        distancia = calcular_distancia(rappitendero_al_azar_actualizado['Posicion actual'], cliente['Posicion'])
-        mostrar_tiempo_estimado(distancia)
-        rappitendero_al_azar_actualizado = actualizar_posicion_pedido_rappitendero(posicion_cliente, pedido, rappitendero_al_azar_actualizado)
-        importe_total = obtener_importe_pedido_manual(platos_restaurante, pedido['Pedido'])
-        print("\n => El importe total a pagar es de: ${}.".format(importe_total))
-        rappitendero_al_azar_actualizado, cliente_actualizado = actualizar_ganancias_rappitendero_cliente(importe_total, rappitendero_al_azar_actualizado, cliente)
-        print("\n => El pedido ya fue recibido en su domicilio. Usted ganó {} rappicreditos por la compra.".format(cliente_actualizado['Rappicreditos']))
-        restaurante_actualizado = actualizar_ventas_restaurante(importe_total, restaurante) 
-        lista_clientes = actualizar_item_lista_entidad(lista_clientes, cliente, cliente_actualizado)
-        lista_restaurantes = actualizar_item_lista_entidad(lista_restaurantes, restaurante, restaurante_actualizado)
-        lista_rappitenderos = actualizar_item_lista_entidad(lista_rappitenderos, rappitendero_al_azar, rappitendero_al_azar_actualizado)
-        print("\n Se cerrará su sesión.\n Hasta luego, vuelva pronto ☺.")      
+        lista_clientes, lista_restaurantes, lista_rappitenderos = procesar_pedido_manual(pedido, cliente, restaurante, lista_clientes, lista_restaurantes, lista_rappitenderos)     
     imprimir_aviso_de_retorno_al_menu_anterior()
-    return lista_clientes  
+    return lista_clientes, lista_restaurantes, lista_rappitenderos  

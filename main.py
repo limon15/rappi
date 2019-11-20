@@ -47,7 +47,7 @@ def menu():
             clientes, restaurantes, rappitenderos = carga_manual(clientes, restaurantes, rappitenderos)
         elif (opcion_elegida == 2):
             imprimir_titulo_seccion("pedido manual")
-            pedido_manual(clientes, restaurantes, rappitenderos)
+            clientes, restaurantes, rappitenderos = pedido_manual(clientes, restaurantes, rappitenderos)
         elif (opcion_elegida == 3):
             imprimir_titulo_seccion("simulaciones")
             clientes, restaurantes, rappitenderos = simulacion_de_pedidos(clientes, restaurantes, rappitenderos)
