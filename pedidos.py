@@ -163,17 +163,16 @@ def pedido_manual(lista_clientes, lista_restaurantes, lista_rappitenderos):
     existen_clientes = evaluar_existencia_entidad(lista_clientes, 'clientes')
     if existen_clientes:
         cliente = iniciar_sesion_cliente(lista_clientes)
-        continuar_pedido = True
-        pedido = { 'Pedido': [], 'Cliente': cliente }
-        restaurante = elegir_restaurante(lista_restaurantes)
-        # if (len(restaurante) == 0):
-        #     print("No existen restaurantes en tu zona.")    
-        # else:
-        while continuar_pedido:
-            nombre_plato = elegir_plato(restaurante)
-            cant_plato = solicitar_cantidad_platos(nombre_plato, 1, 10)
-            pedido['Pedido'] = actualizar_pedido(pedido['Pedido'], cant_plato, nombre_plato)
-            continuar_pedido = continuar_pidiendo()
-        lista_clientes, lista_restaurantes, lista_rappitenderos = procesar_pedido_manual(pedido, cliente, restaurante, lista_clientes, lista_restaurantes, lista_rappitenderos)     
+        existen_restaurantes = evaluar_existencia_entidad(lista_restaurantes, 'restaurantes')
+        if existen_restaurantes:
+            continuar_pedido = True
+            pedido = { 'Pedido': [], 'Cliente': cliente }
+            restaurante = elegir_restaurante(lista_restaurantes)
+            while continuar_pedido:
+                nombre_plato = elegir_plato(restaurante)
+                cant_plato = solicitar_cantidad_platos(nombre_plato, 1, 10)
+                pedido['Pedido'] = actualizar_pedido(pedido['Pedido'], cant_plato, nombre_plato)
+                continuar_pedido = continuar_pidiendo()
+            lista_clientes, lista_restaurantes, lista_rappitenderos = procesar_pedido_manual(pedido, cliente, restaurante, lista_clientes, lista_restaurantes, lista_rappitenderos)     
     imprimir_aviso_de_retorno_al_menu_anterior()
     return lista_clientes, lista_restaurantes, lista_rappitenderos  
