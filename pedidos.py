@@ -124,6 +124,7 @@ def elegir_restaurante(lista_restaurantes):
     restaurante = lista_restaurantes[indice_restaurante]
     return restaurante
 
+
 def elegir_plato(restaurante):
     eleccion_platos_valida = False    
     while not eleccion_platos_valida:
@@ -165,6 +166,9 @@ def pedido_manual(lista_clientes, lista_restaurantes, lista_rappitenderos):
         continuar_pedido = True
         pedido = { 'Pedido': [], 'Cliente': cliente }
         restaurante = elegir_restaurante(lista_restaurantes)
+        # if (len(restaurante) == 0):
+        #     print("No existen restaurantes en tu zona.")    
+        # else:
         while continuar_pedido:
             nombre_plato = elegir_plato(restaurante)
             cant_plato = solicitar_cantidad_platos(nombre_plato, 1, 10)
