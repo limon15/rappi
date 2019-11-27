@@ -3,6 +3,7 @@ from validaciones import *
 from prettytable import PrettyTable
 from random import choice
 from common import devolver_opcion_elegida_validada_desde_lista, listar_opciones, imprimir_aviso_de_retorno_al_menu_anterior, obtener_lista_nombres_restaurantes, evaluar_existencia_entidad
+from info_predefinida import cargar_data_predefinida
 
 # Constantes de inputs:
 
@@ -24,26 +25,26 @@ def obtener_reporte_de_carga(cant_inicial, cant_final, cant_fallados, entidad):
     return print("REPORTE DE CARGA DE {}: \n{}{}\n".format(entidad.upper(), t, "\n* El nombre a cargar se encontraba entre los ya existentes" if cant_fallados>0 else ''))
 
 # Data harcodeada: 
-def cargar_restaurantes_predefinidos(lista_restaurantes=[]):
-    cant_inicial = len(lista_restaurantes)
-    cant_fallados = 0
-    restaurantes = [
-        {'Nombre': 'MARIA BONITA', 'Direccion': 'Mitre 1195, Adrogue, Buenos Aires', 'Telefono': '011 4294-1184', 'Posicion': (-34.797054, -58.391627), 'Radio de entrega': 2.5, 'Platos': [{'Nombre': 'Ensalada Ninetta', 'Precio': 250},{'Nombre': 'Rissotto ai funghi', 'Precio': 370}, {'Nombre': 'Brotola a los 4 quesos', 'Precio': 570}], 'Total de ventas': 0, 'Moneda': 'ARG'},
-        {'Nombre': 'PASTA ROSSA', 'Direccion': 'Jorge San Pellerano 754, Adrogue, Buenos Aires', 'Telefono': '011 4214-3437', 'Posicion': (-34.799433, -58.390941), 'Radio de entrega': 1, 'Platos': [{'Nombre': 'Gnocchi souffle', 'Precio': 219},{'Nombre': 'Ravioli di formaggio', 'Precio': 229}, {'Nombre': 'Sorrentino di salmone', 'Precio': 310}], 'Total de ventas': 0, 'Moneda': 'ARG'},
-        {'Nombre': 'PIZZERIA EL FARO', 'Direccion': 'Esteban Adrogué 1187, Adrogue, Buenos Aires', 'Telefono': '011 4214-4144', 'Posicion': (-34.798170, -58.390783), 'Radio de entrega': 3.5, 'Platos': [{'Nombre': 'Pizza muzzarella', 'Precio': 150},{'Nombre': 'Pizza napolitana', 'Precio': 170}, {'Nombre': 'Pizza ananá con azucar', 'Precio': 200}], 'Total de ventas': 0, 'Moneda': 'ARG'},
-        {'Nombre': 'TIRIFILO EL BODEGON', 'Direccion': 'Cordero 694, Adrogue, Buenos Aires', 'Telefono': '011 4294-4195', 'Posicion': (-34.801080, -58.395488), 'Radio de entrega': 5, 'Platos': [{'Nombre': 'Milanesa con ensalada', 'Precio': 200},{'Nombre': 'Salteado de carne', 'Precio': 250}, {'Nombre': 'Guiso de mondongo', 'Precio': 320}], 'Total de ventas': 0, 'Moneda': 'ARG'},
-        {'Nombre': 'SUSHI ADROGUE', 'Direccion': 'Int. Dr. Martín González 806, Adrogue, Buenos Aires', 'Telefono': '0810-220-2006', 'Posicion': (-34.798375, -58.396260), 'Radio de entrega': 0.5, 'Platos': [{'Nombre': 'Uramaki', 'Precio': 300},{'Nombre': 'Nirigi de atun', 'Precio': 350}, {'Nombre': 'Dorayakis', 'Precio': 400}], 'Total de ventas': 0, 'Moneda': 'ARG'}]
-    if (cant_inicial!=0):
-        for dic in restaurantes:
-            if (no_existe_en_lista(dic['Nombre'], 'Nombre', lista_restaurantes)):
-                lista_restaurantes.extend([dic])
-            else:
-                cant_fallados+=1    
-    else:
-        lista_restaurantes = restaurantes
-    cant_final = len(lista_restaurantes)
-    obtener_reporte_de_carga(cant_inicial, cant_final, cant_fallados, 'restaurantes')
-    return lista_restaurantes
+# def cargar_restaurantes_predefinidos(lista_restaurantes=[]):
+#     cant_inicial = len(lista_restaurantes)
+#     cant_fallados = 0
+#     restaurantes = [
+#         {'Nombre': 'MARIA BONITA', 'Direccion': 'Mitre 1195, Adrogue, Buenos Aires', 'Telefono': '011 4294-1184', 'Posicion': (-34.797054, -58.391627), 'Radio de entrega': 2.5, 'Platos': [{'Nombre': 'Ensalada Ninetta', 'Precio': 250},{'Nombre': 'Rissotto ai funghi', 'Precio': 370}, {'Nombre': 'Brotola a los 4 quesos', 'Precio': 570}], 'Total de ventas': 0, 'Moneda': 'ARG'},
+#         {'Nombre': 'PASTA ROSSA', 'Direccion': 'Jorge San Pellerano 754, Adrogue, Buenos Aires', 'Telefono': '011 4214-3437', 'Posicion': (-34.799433, -58.390941), 'Radio de entrega': 1, 'Platos': [{'Nombre': 'Gnocchi souffle', 'Precio': 219},{'Nombre': 'Ravioli di formaggio', 'Precio': 229}, {'Nombre': 'Sorrentino di salmone', 'Precio': 310}], 'Total de ventas': 0, 'Moneda': 'ARG'},
+#         {'Nombre': 'PIZZERIA EL FARO', 'Direccion': 'Esteban Adrogué 1187, Adrogue, Buenos Aires', 'Telefono': '011 4214-4144', 'Posicion': (-34.798170, -58.390783), 'Radio de entrega': 3.5, 'Platos': [{'Nombre': 'Pizza muzzarella', 'Precio': 150},{'Nombre': 'Pizza napolitana', 'Precio': 170}, {'Nombre': 'Pizza ananá con azucar', 'Precio': 200}], 'Total de ventas': 0, 'Moneda': 'ARG'},
+#         {'Nombre': 'TIRIFILO EL BODEGON', 'Direccion': 'Cordero 694, Adrogue, Buenos Aires', 'Telefono': '011 4294-4195', 'Posicion': (-34.801080, -58.395488), 'Radio de entrega': 5, 'Platos': [{'Nombre': 'Milanesa con ensalada', 'Precio': 200},{'Nombre': 'Salteado de carne', 'Precio': 250}, {'Nombre': 'Guiso de mondongo', 'Precio': 320}], 'Total de ventas': 0, 'Moneda': 'ARG'},
+#         {'Nombre': 'SUSHI ADROGUE', 'Direccion': 'Int. Dr. Martín González 806, Adrogue, Buenos Aires', 'Telefono': '0810-220-2006', 'Posicion': (-34.798375, -58.396260), 'Radio de entrega': 0.5, 'Platos': [{'Nombre': 'Uramaki', 'Precio': 300},{'Nombre': 'Nirigi de atun', 'Precio': 350}, {'Nombre': 'Dorayakis', 'Precio': 400}], 'Total de ventas': 0, 'Moneda': 'ARG'}]
+#     if (cant_inicial!=0):
+#         for dic in restaurantes:
+#             if (no_existe_en_lista(dic['Nombre'], 'Nombre', lista_restaurantes)):
+#                 lista_restaurantes.extend([dic])
+#             else:
+#                 cant_fallados+=1    
+#     else:
+#         lista_restaurantes = restaurantes
+#     cant_final = len(lista_restaurantes)
+#     obtener_reporte_de_carga(cant_inicial, cant_final, cant_fallados, 'restaurantes')
+#     return lista_restaurantes
 
 
 def cargar_clientes_predefinidos(lista_clientes=[]):
@@ -251,9 +252,9 @@ def carga_manual(lista_clientes, lista_restaurantes, lista_rappitenderos):
     return lista_clientes, lista_restaurantes, lista_rappitenderos 
 
 
-def cargar_predefinida(lista_clientes=[], lista_restaurantes=[], lista_rappitenderos=[]):
-    lista_clientes = cargar_clientes_predefinidos(lista_clientes)
-    lista_restaurantes = cargar_restaurantes_predefinidos(lista_restaurantes)
-    lista_rappitenderos = cargar_rappitenderos_predefinidos(lista_rappitenderos)
+def carga_predefinida(lista_clientes=[], lista_restaurantes=[], lista_rappitenderos=[]):
+    lista_clientes = cargar_data_predefinida(lista_clientes, 'clientes')
+    lista_restaurantes = cargar_data_predefinida(lista_restaurantes,'restaurantes')
+    lista_rappitenderos = cargar_data_predefinida(lista_rappitenderos, 'rappitenderos')
     imprimir_aviso_de_retorno_al_menu_anterior()
     return lista_clientes, lista_restaurantes, lista_rappitenderos

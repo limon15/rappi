@@ -1,6 +1,6 @@
 from common import validar_opcion_ingresada, obtener_lista_nombres_restaurantes, devolver_opcion_elegida_validada_desde_lista, devolver_item_lista_entidad_segun_clave_valor, evaluar_existencia_entidad, imprimir_aviso_de_retorno_al_menu_anterior
 from validaciones import no_existe_en_lista, alertar_error
-from cargar_data import validar_nombre_eleccion_entidad, PrettyTable, cargar_restaurantes_predefinidos
+from cargar_data import validar_nombre_eleccion_entidad, PrettyTable
 from simulaciones import obtener_valor_al_azar_de_lista_de_dic, actualizar_item_lista_entidad
 
 # Función que muestra los platos enumerados, con su precio, del restaurante elegido.
@@ -175,4 +175,4 @@ def pedido_manual(lista_clientes, lista_restaurantes, lista_rappitenderos):
                 continuar_pedido = continuar_pidiendo()
             lista_clientes, lista_restaurantes, lista_rappitenderos = procesar_pedido_manual(pedido, cliente, restaurante, lista_clientes, lista_restaurantes, lista_rappitenderos)     
     imprimir_aviso_de_retorno_al_menu_anterior()
-    return lista_clientes, lista_restaurantes, lista_rappitenderos  
+    return lista_clientes, lista_restaurantes, lista_rappitenderos 
