@@ -222,6 +222,7 @@ def procesar_pedido_manual(pedido, cliente, restaurante, lista_clientes, lista_r
     print("\n Se cerrará su sesión.\n Hasta luego, vuelva pronto ☺.")
     return lista_clientes, lista_restaurantes, lista_rappitenderos
 
+
 def pedido_manual(lista_clientes, lista_restaurantes, lista_rappitenderos):
     existen_clientes = evaluar_existencia_entidad(lista_clientes, 'clientes')
     if existen_clientes:
