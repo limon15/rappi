@@ -190,44 +190,53 @@ def elegir_plato(restaurante):
     nombre_plato =  platos_restaurante[indice_plato]['Nombre']
     return nombre_plato
 
-def procesar_pedido_manual(pedido, cliente, restaurante, lista_clientes, lista_restaurantes, lista_rappitenderos, lista_rappitendero_mas_cercano):
+def realizar_retiro_del_pedido(pedido, rappitendero, restaurante, distancia_rappitendero_restaurante):
+    rappitendero_mas_cercano_actualizado = actualizar_distancia_recorrida_rappitendero(rappitendero, distancia_rappitendero_restaurante) ## Actualizo la distancia recorrida desde donde estaba el rappitendero hacia el restaurante.
+    rappitendero_mas_cercano_actualizado = actualizar_posicion_pedido_rappitendero(restaurante['Posicion'], pedido, rappitendero)
+    return rappitendero_mas_cercano_actualizado
 
-    print("\nEste es su pedido:\n")
-    generar_reporte_pedido(pedido)
+def realizar_entrega_del_pedido(pedido, rappitendero, cliente, distancia_restaurante_cliente):
+    print("\n => El pedido será entregado a la dirección: {}".format(cliente['Direccion']))   
+    rappitendero_mas_cercano_actualizado = actualizar_distancia_recorrida_rappitendero(rappitendero, distancia_restaurante_cliente) ## Actualizo la distancia recorrida desde donde estaba el rappitendero hacia el cliente.
+    rappitendero_mas_cercano_actualizado = actualizar_posicion_pedido_rappitendero(cliente['Posicion'], pedido, rappitendero)
+    return rappitendero_mas_cercano_actualizado
 
-    posicion_rappitendero = lista_rappitendero_mas_cercano['Posicion actual']
-    posicion_restaurante = restaurante['Posicion']
-    posicion_cliente = cliente['Posicion'] 
-
-    distancia_rappitendero_restaurante = calcular_distancia_terrestre(posicion_rappitendero[0], posicion_rappitendero[1], posicion_restaurante[0], posicion_restaurante[1])
-
-    rappitendero_mas_cercano_actualizado = actualizar_distancia_recorrida_rappitendero(lista_rappitendero_mas_cercano, distancia_rappitendero_restaurante) ## Actualizo la distancia recorrida desde donde estaba el rappitendero hacia el restaurante.
-    rappitendero_mas_cercano_actualizado = actualizar_posicion_pedido_rappitendero(posicion_restaurante, pedido, rappitendero_mas_cercano_actualizado)
- 
-    print("\n => El pedido será entregado a la dirección: {}".format(cliente['Direccion']))      
-
-    distancia_restaurante_cliente = calcular_distancia_terrestre(posicion_restaurante[0], posicion_restaurante[1], posicion_cliente[0], posicion_cliente[1])
-
-    distancia_total_recorrida = round(distancia_rappitendero_restaurante,2)+round(distancia_restaurante_cliente,2)
-
-    mostrar_tiempo_estimado(distancia_total_recorrida)
-    rappitendero_mas_cercano_actualizado = actualizar_posicion_pedido_rappitendero(posicion_cliente, pedido, rappitendero_mas_cercano_actualizado)
-
+def calcular_importe_pedido(restaurante, pedido):
     platos_restaurante = restaurante['Platos']
     importe_total = obtener_importe_pedido_manual(platos_restaurante, pedido['Pedido'])
     print("\n => El importe total a pagar es de: ${}.".format(importe_total))
-    rappitendero_mas_cercano_actualizado['Propina acumulada'] += actualizar_ganancias_rappitendero(importe_total)
-    cliente_actualizado = cliente
-    cliente_actualizado['Rappicreditos'] += actualizar_ganancias_cliente(importe_total)
-    # rappitendero_mas_cercano_actualizado, cliente_actualizado = actualizar_ganancias_rappitendero_cliente(importe_total, rappitendero_mas_cercano_actualizado, cliente)
-    print("\n => El pedido ya fue recibido en su domicilio. Usted ganó {} rappicreditos por la compra.".format(cliente_actualizado['Rappicreditos']))
+    return importe_total
+
+def actualizar_ganancias(importe_total, cliente, restaurante, rappitendero):
+    cliente['Rappicreditos'] += actualizar_ganancias_cliente(importe_total)
+    restaurante = actualizar_ventas_restaurante(importe_total, restaurante) 
+    rappitendero['Propina acumulada'] += actualizar_ganancias_rappitendero(importe_total)
+    print("\n => El pedido ya fue recibido en su domicilio. Usted ganó ${} en rappicreditos por la compra.".format(actualizar_ganancias_cliente(importe_total)))
+    return cliente, restaurante, rappitendero
     
-    rappitendero_mas_cercano_actualizado = actualizar_distancia_recorrida_rappitendero(rappitendero_mas_cercano_actualizado, distancia_restaurante_cliente) ## Actualizo la distancia recorrida desde donde estaba el rappitendero hacia el cliente.
-    restaurante_actualizado = actualizar_ventas_restaurante(importe_total, restaurante) 
+
+def procesar_pedido_manual(pedido, cliente, restaurante, rappitendero_mas_cercano, lista_clientes, lista_restaurantes, lista_rappitenderos):
+
+    print("\nEste es su pedido:\n")
+    generar_reporte_pedido(pedido)
+    posicion_cliente = cliente['Posicion'] 
+    posicion_restaurante = restaurante['Posicion']
+    posicion_rappitendero = rappitendero_mas_cercano['Posicion actual']
+    distancia_rappitendero_restaurante = calcular_distancia_terrestre(posicion_rappitendero[0], posicion_rappitendero[1], posicion_restaurante[0], posicion_restaurante[1])
+    distancia_restaurante_cliente = calcular_distancia_terrestre(posicion_restaurante[0], posicion_restaurante[1], posicion_cliente[0], posicion_cliente[1])
+    rappitendero_mas_cercano_actualizado = realizar_retiro_del_pedido(pedido, rappitendero_mas_cercano, restaurante, distancia_rappitendero_restaurante)   
+    rappitendero_mas_cercano_actualizado = realizar_entrega_del_pedido(pedido, rappitendero_mas_cercano_actualizado, cliente, distancia_restaurante_cliente)
+    
+    distancia_total_recorrida = round(distancia_rappitendero_restaurante,2)+round(distancia_restaurante_cliente,2)
+    mostrar_tiempo_estimado(distancia_total_recorrida)
+
+    importe_total = calcular_importe_pedido(restaurante, pedido)
+
+    cliente_actualizado, restaurante_actualizado, rappitendero_mas_cercano_actualizado = actualizar_ganancias(importe_total, cliente, restaurante, rappitendero_mas_cercano)
 
     lista_clientes = actualizar_item_lista_entidad(lista_clientes, cliente, cliente_actualizado)
     lista_restaurantes = actualizar_item_lista_entidad(lista_restaurantes, restaurante, restaurante_actualizado)
-    lista_rappitenderos = actualizar_item_lista_entidad(lista_rappitenderos, lista_rappitendero_mas_cercano, rappitendero_mas_cercano_actualizado)
+    lista_rappitenderos = actualizar_item_lista_entidad(lista_rappitenderos, rappitendero_mas_cercano, rappitendero_mas_cercano_actualizado)
 
     print("\n Se cerrará su sesión.\n Hasta luego, vuelva pronto ☺.")
     return lista_clientes, lista_restaurantes, lista_rappitenderos
@@ -252,8 +261,8 @@ def pedido_manual(lista_clientes, lista_restaurantes, lista_rappitenderos):
                 pedido['Pedido'] = actualizar_pedido(pedido['Pedido'], cant_plato, nombre_plato)
                 continuar_pedido = continuar_pidiendo()
 
-            lista_rappitendero_mas_cercano = devolver_entidad_cercana(restaurante, lista_rappitenderos, 'Posicion', 'Posicion actual', 2) 
-            lista_clientes, lista_rappitendero_mas_cercano, lista_rappitenderos = procesar_pedido_manual(pedido, cliente, restaurante, lista_clientes, lista_restaurantes, lista_rappitenderos, lista_rappitendero_mas_cercano) ## Agregué un parámetro (el de último lugar).
+            rappitendero_mas_cercano = devolver_entidad_cercana(restaurante, lista_rappitenderos, 'Posicion', 'Posicion actual', 2) 
+            lista_clientes, lista_restaurantes, lista_rappitenderos = procesar_pedido_manual(pedido, cliente, restaurante, rappitendero_mas_cercano, lista_clientes, lista_restaurantes, lista_rappitenderos)
         else:
             print("Lo sentimos. No existen restaurantes disponibles en tu zona.")    
 
