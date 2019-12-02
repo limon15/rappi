@@ -68,15 +68,21 @@ def obtener_importe_pedido_manual(lista_platos, lista_pedidos):
         importe_total += float(plato['Precio'])*int(lista_pedidos[i][0])
     return importe_total
 
-def actualizar_ganancias_rappitendero_cliente(importe_pedido, rappitendero, cliente):
-    rappitendero['Propina acumulada'] += round(0.05*importe_pedido,2)
-    if importe_pedido<200:
-        cliente['Rappicreditos'] += round(0.05*importe_pedido,2)
-    elif 200<importe_pedido<500: 
-        cliente['Rappicreditos'] += round(0.10*importe_pedido,2)
-    else: 
-        cliente['Rappicreditos'] += round(0.15*importe_pedido,2)
-    return rappitendero, cliente
+def actualizar_ganancias_rappitendero(importe_pedido):
+    ganancia_rappitendero = round(0.05*float(importe_pedido),2) if float(importe_pedido)>0 else 0
+    return ganancia_rappitendero
+
+def actualizar_ganancias_cliente(importe_pedido):
+    if importe_pedido>0:
+        if importe_pedido<200:
+            ganancia_cliente = round(0.05*importe_pedido,2)
+        elif 200<importe_pedido<1000: 
+            ganancia_cliente = round(0.10*importe_pedido,2)
+        else: 
+            ganancia_cliente = round(0.15*importe_pedido,2)
+    else:
+        ganancia_cliente = 0        
+    return ganancia_cliente
 
 def actualizar_posicion_pedido_rappitendero(posicion_nueva, pedido, rappitendero):
     rappitendero['Posicion actual'] = posicion_nueva
@@ -210,7 +216,10 @@ def procesar_pedido_manual(pedido, cliente, restaurante, lista_clientes, lista_r
     platos_restaurante = restaurante['Platos']
     importe_total = obtener_importe_pedido_manual(platos_restaurante, pedido['Pedido'])
     print("\n => El importe total a pagar es de: ${}.".format(importe_total))
-    rappitendero_mas_cercano_actualizado, cliente_actualizado = actualizar_ganancias_rappitendero_cliente(importe_total, rappitendero_mas_cercano_actualizado, cliente)
+    rappitendero_mas_cercano_actualizado['Propina acumulada'] += actualizar_ganancias_rappitendero(importe_total)
+    cliente_actualizado = cliente
+    cliente_actualizado['Rappicreditos'] += actualizar_ganancias_cliente(importe_total)
+    # rappitendero_mas_cercano_actualizado, cliente_actualizado = actualizar_ganancias_rappitendero_cliente(importe_total, rappitendero_mas_cercano_actualizado, cliente)
     print("\n => El pedido ya fue recibido en su domicilio. Usted ganó {} rappicreditos por la compra.".format(cliente_actualizado['Rappicreditos']))
     
     rappitendero_mas_cercano_actualizado = actualizar_distancia_recorrida_rappitendero(rappitendero_mas_cercano_actualizado, distancia_restaurante_cliente) ## Actualizo la distancia recorrida desde donde estaba el rappitendero hacia el cliente.

@@ -38,15 +38,21 @@ def obtener_importe_pedido_manual(lista_platos, lista_pedidos):
         importe_total += float(plato['Precio'])*int(lista_pedidos[i][0])
     return importe_total
 
-def actualizar_ganancias_rappitendero_cliente(importe_pedido, rappitendero, cliente):
-    rappitendero['Propina acumulada'] += round(0.05*importe_pedido,2)
-    if importe_pedido<200:
-        cliente['Rappicreditos'] += round(0.05*importe_pedido,2)
-    elif 200<importe_pedido<500: 
-        cliente['Rappicreditos'] += round(0.10*importe_pedido,2)
-    else: 
-        cliente['Rappicreditos'] += round(0.15*importe_pedido,2)
-    return rappitendero, cliente     
+def actualizar_ganancias_rappitendero(importe_pedido):
+    ganancia_rappitendero = round(0.05*float(importe_pedido),2) if float(importe_pedido)>0 else 0
+    return ganancia_rappitendero
+
+def actualizar_ganancias_cliente(importe_pedido):
+    if importe_pedido>0:
+        if importe_pedido<200:
+            ganancia_cliente = round(0.05*importe_pedido,2)
+        elif 200<importe_pedido<1000: 
+            ganancia_cliente = round(0.10*importe_pedido,2)
+        else: 
+            ganancia_cliente = round(0.15*importe_pedido,2)
+    else:
+        ganancia_cliente = 0        
+    return ganancia_cliente   
 
 def actualizar_posicion_pedido_rappitendero(posicion_nueva, pedido, rappitendero):
     rappitendero['Posicion actual'] = posicion_nueva
@@ -133,7 +139,7 @@ def simulacion_de_pedidos(lista_clientes, lista_restaurantes, lista_rappitendero
             if len(lista_restaurantes_cercanos)!=0:
                 restaurante_cercano = obtener_valor_al_azar_de_lista_de_dic(lista_restaurantes_cercanos, "restaurante", "Nombre") 
                 variedad_platos = randint(1, len(restaurante_cercano['Platos'])) if variedad_max_platos>len(restaurante_cercano['Platos']) else randint(1,variedad_max_platos)
-                print(f"\n => Se estableció una variedad de {variedad_platos} plato/s por pedido.\n")            
+                print(f"\n => Se estableció una variedad máxima de {variedad_platos} plato/s por pedido.\n")            
                 lista_platos = restaurante_cercano['Platos'][:variedad_platos]
                 lista_pedidos_aleatorios = generar_lista_pedidos_aleatorios(lista_platos)
                 pedido = {'Pedido': lista_pedidos_aleatorios, 'Cliente': cliente_al_azar}
@@ -151,7 +157,9 @@ def simulacion_de_pedidos(lista_clientes, lista_restaurantes, lista_rappitendero
                 print(f"\n => El rappitendero recorrió una distancia total de: {distancia_total_recorrida} km.")
                 mostrar_tiempo_estimado(distancia_total_recorrida)
                 rappitendero_mas_cercano_actualizado = actualizar_posicion_pedido_rappitendero(cliente_al_azar['Posicion'], pedido, rappitendero_mas_cercano_actualizado)
-                rappitendero_mas_cercano_actualizado, cliente_al_azar_actualizado = actualizar_ganancias_rappitendero_cliente(importe_total, rappitendero_mas_cercano_actualizado, cliente_al_azar)
+                cliente_al_azar_actualizado = cliente_al_azar
+                rappitendero_mas_cercano_actualizado['Propina acumulada'] += actualizar_ganancias_rappitendero(importe_total)
+                cliente_al_azar_actualizado['Rappicreditos'] += actualizar_ganancias_cliente(importe_total)
                 restaurante_mas_cercano_actualizado = actualizar_ventas_restaurante(importe_total, restaurante_cercano)
             else:
                 print("No se encontraron restaurantes disponibles en la zona del cliente.")       
