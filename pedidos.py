@@ -230,7 +230,7 @@ def pedido_manual(lista_clientes, lista_restaurantes, lista_rappitenderos):
         cliente = iniciar_sesion_cliente(lista_clientes)
         existen_restaurantes = evaluar_existencia_entidad(lista_restaurantes, 'restaurantes')
         
-        lista_restaurantes_cercanos = devolver_entidad_cercana(cliente, lista_restaurantes, 'Posicion', 'Posicion', 1) ## Agregué esta linea para obtener la lista de restaurantes cercanos.
+        lista_restaurantes_cercanos = devolver_entidad_cercana(cliente, lista_restaurantes, 'Posicion', 'Posicion', 1)
         
         if (existen_restaurantes and len(lista_restaurantes_cercanos)!=0):
             continuar_pedido = True
@@ -243,7 +243,7 @@ def pedido_manual(lista_clientes, lista_restaurantes, lista_rappitenderos):
                 pedido['Pedido'] = actualizar_pedido(pedido['Pedido'], cant_plato, nombre_plato)
                 continuar_pedido = continuar_pidiendo()
 
-            lista_rappitendero_mas_cercano = devolver_entidad_cercana(restaurante, lista_rappitenderos, 'Posicion', 'Posicion actual', 2) ## Agregué esta linea para obtener la lista de datos del rappitendero mas cercano.
+            lista_rappitendero_mas_cercano = devolver_entidad_cercana(restaurante, lista_rappitenderos, 'Posicion', 'Posicion actual', 2) 
             lista_clientes, lista_rappitendero_mas_cercano, lista_rappitenderos = procesar_pedido_manual(pedido, cliente, restaurante, lista_clientes, lista_restaurantes, lista_rappitenderos, lista_rappitendero_mas_cercano) ## Agregué un parámetro (el de último lugar).
         else:
             print("Lo sentimos. No existen restaurantes disponibles en tu zona.")    

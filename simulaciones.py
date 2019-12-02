@@ -119,6 +119,7 @@ def mostrar_tiempo_estimado(distancia):
 
 # Función encargarda de simular una cantidad n de pedidos. Actualizará los datos de
 # usuarios, restaurantes y rappitenderos correspondientes. Al finalizar vuelve al menú principal.
+
 def simulacion_de_pedidos(lista_clientes, lista_restaurantes, lista_rappitenderos):
     informacion_suficiente = evaluar_informacion_suficiente(lista_clientes, lista_restaurantes, lista_rappitenderos)
     if informacion_suficiente :
@@ -144,6 +145,7 @@ def simulacion_de_pedidos(lista_clientes, lista_restaurantes, lista_rappitendero
                 distancia_rappitendero_restaurante = calcular_distancia_terrestre(rappitendero_mas_cercano['Posicion actual'][0], rappitendero_mas_cercano['Posicion actual'][1], restaurante_cercano['Posicion'][0], restaurante_cercano['Posicion'][1])
                 rappitendero_mas_cercano_actualizado = actualizar_distancia_recorrida_rappitendero(rappitendero_mas_cercano, distancia_rappitendero_restaurante)                
                 distancia_restaurante_cliente = calcular_distancia_terrestre(restaurante_cercano['Posicion'][0], restaurante_cercano['Posicion'][1], cliente_al_azar['Posicion'][0], cliente_al_azar['Posicion'][1])
+                rappitendero_mas_cercano_actualizado = actualizar_posicion_pedido_rappitendero(restaurante_cercano['Posicion'], pedido, rappitendero_mas_cercano_actualizado)
                 rappitendero_mas_cercano_actualizado = actualizar_distancia_recorrida_rappitendero(rappitendero_mas_cercano, distancia_restaurante_cliente)
                 distancia_total_recorrida = round(distancia_rappitendero_restaurante+distancia_restaurante_cliente,2)
                 print(f"\n => El rappitendero recorrió una distancia total de: {distancia_total_recorrida} km.")

@@ -50,8 +50,6 @@ def info_predefinida():
 def cargar_data_predefinida(lista_data, nombre_entidad):
     cant_inicial = len(lista_data)
     cant_fallados = 0
-    # with open('{nombre_entidad}.pkl'.format(nombre_entidad=nombre_entidad), 'rb') as pickle_file:
-    #     lista_data_predefinida = pickle.load(pickle_file)
     lista_data_predefinida = devolver_data_de_archivos_pickle(nombre_entidad, DATA_PRED)
     if cant_inicial != 0:   
         print("Ya existen {nombre_entidad} cargados\n¿Desea sobreescibirlos con la información predefinida?".format(nombre_entidad = nombre_entidad))
