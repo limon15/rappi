@@ -51,7 +51,6 @@ def devolver_entidad_cercana(entidad, lista_entidades, clave_entidad_1, clave_en
     
     return lista_entidad_cercana
 
-
 # Función que muestra los platos enumerados, con su precio, del restaurante elegido.
 #Se muestra platos de la siguiente forma: 1,2...,n. Amentando en 1 la vista de la posición
 #original del plato en la lista de platos.
@@ -155,7 +154,7 @@ def mostrar_tiempo_estimado(distancia):
     velocidad_rappi = 15
     hora_estimada = distancia / velocidad_rappi
     minutos_estimados = hora_estimada * 60
-    print("\n => El tiempo estimado de entrega será de {0:.2} minutos.".format(minutos_estimados))
+    print(f"\n => El tiempo estimado de entrega será de {round(minutos_estimados,2)} minutos.") 
 
 def generar_reporte_pedido(pedido):
     t = PrettyTable(['CANT. PLATOS', 'PLATOS'])
@@ -203,7 +202,9 @@ def procesar_pedido_manual(pedido, cliente, restaurante, lista_clientes, lista_r
 
     distancia_restaurante_cliente = calcular_distancia_terrestre(posicion_restaurante[0], posicion_restaurante[1], posicion_cliente[0], posicion_cliente[1])
 
-    mostrar_tiempo_estimado(distancia_restaurante_cliente)
+    distancia_total_recorrida = round(distancia_rappitendero_restaurante,2)+round(distancia_restaurante_cliente,2)
+
+    mostrar_tiempo_estimado(distancia_total_recorrida)
     rappitendero_mas_cercano_actualizado = actualizar_posicion_pedido_rappitendero(posicion_cliente, pedido, rappitendero_mas_cercano_actualizado)
 
     platos_restaurante = restaurante['Platos']

@@ -14,7 +14,7 @@ def mostrar_top_entidad_segun_clave_valor(lista, limit, col_to_order, id_col):
 def informes(lista_clientes, lista_restaurantes, lista_rappitenderos):
     informacion_suficiente = evaluar_informacion_suficiente(lista_clientes, lista_restaurantes, lista_rappitenderos)
     if informacion_suficiente:
-        opciones = ['Clientes con mayor Rappicreditos', 'Rappitenderos con mayor propina acumulada', 'Restaurantes que mas ventas tuvieron', 'Volver al menú principal']
+        opciones = ['Clientes con mayor Rappicreditos', 'Rappitenderos con mayor propina acumulada', 'Restaurantes que mas ventas tuvieron', 'Generar csv de rappitenderos', 'Volver al menú principal']
         opcion_elegida = devolver_opcion_elegida_validada_desde_lista(opciones, 2)
         volver = len(opciones)-1
         while opcion_elegida != volver :
@@ -29,6 +29,16 @@ def informes(lista_clientes, lista_restaurantes, lista_rappitenderos):
             elif opcion_elegida == 2:
                 print("\nEstos son los restaurantes que más ventas tuvieron: \n")                 
                 mostrar_top_entidad_segun_clave_valor(lista_restaurantes, 5, "Total de ventas", "Nombre")
-                imprimir_aviso_de_retorno_al_menu_anterior()                                              
+                imprimir_aviso_de_retorno_al_menu_anterior()
+            elif opcion_elegida == 3:
+                generar_archivo_rappitenderos(lista_rappitenderos)
+                imprimir_aviso_de_retorno_al_menu_anterior()                                                                  
             opcion_elegida = devolver_opcion_elegida_validada_desde_lista(opciones, 2)
     imprimir_aviso_de_retorno_al_menu_anterior()
+
+def generar_archivo_rappitenderos(lista_rappitenderos):
+    f = open("rappitenderos.csv", "w")
+    for i in range(len(lista_rappitenderos)):
+        f.write(f"{lista_rappitenderos[i]['Nombre']},{lista_rappitenderos[i]['Distancia recorrida']}\r\n")
+    f.close()    
+    print("\nSe generó satisfactoriamente el archivo rappitenderos.csv\n")  
