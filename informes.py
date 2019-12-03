@@ -1,4 +1,4 @@
-from common import evaluar_informacion_suficiente, devolver_opcion_elegida_validada_desde_lista, imprimir_aviso_de_retorno_al_menu_anterior, PrettyTable
+from common import evaluar_informacion_suficiente, devolver_opcion_elegida_validada_desde_lista, imprimir_aviso_de_retorno_al_menu_anterior, PrettyTable, evaluar_existencia_entidad
 
 
 def mostrar_top_entidad_segun_clave_valor(lista, limit, col_to_order, id_col):
