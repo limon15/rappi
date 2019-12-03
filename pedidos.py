@@ -8,7 +8,6 @@ def actualizar_distancia_recorrida_rappitendero(rappitendero, distancia):
     rappitendero['Distancia recorrida']+= distancia
     return rappitendero
 
-
 def calcular_distancia_terrestre(lon1, lat1, lon2, lat2):
 
     # Convierte grados decimales a radianes. Para esto importamos la librería math.

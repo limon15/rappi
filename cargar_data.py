@@ -140,7 +140,7 @@ def cargar_nuevo_rappitendero(lista_restaurantes=[], lista_rappitenderos=[]):
         while nombre!='*':
             if (nombre_tiene_formato_valido(nombre)):            
                 posicion_actual = choice(lista_restaurantes)['Posicion actual']
-                lista_rappitenderos.append({'Nombre': nombre.upper(), 'Propina acumulada': 0.0, 'Posicion actual': posicion_actual, 'Pedido actual': None})
+                lista_rappitenderos.append({'Nombre': nombre.upper(), 'Propina acumulada': 0.0, 'Posicion actual': posicion_actual, 'Pedido actual': None, 'Distancia recorrida': 0})
                 notificar_carga_exitosa("rappitendero", nombre)            
             else:
                 alertar_error("nombre", "\n a) No tiene un formato valido.")
