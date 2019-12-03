@@ -3,12 +3,15 @@ from common import evaluar_informacion_suficiente, devolver_opcion_elegida_valid
 
 def mostrar_top_entidad_segun_clave_valor(lista, limit, col_to_order, id_col):
     list_sorted = sorted(lista, key = lambda x: x[col_to_order], reverse=True)
-    t = PrettyTable([id_col, col_to_order])
-    i=0
-    while i < len(list_sorted) and i<limit:
-        t.add_row([list_sorted[i][id_col], list_sorted[i][col_to_order]])
-        i+=1
-    print(t)
+    if not list_sorted[0][col_to_order] == 0:
+        t = PrettyTable([id_col, col_to_order])
+        i=0
+        while i < len(list_sorted) and i<limit:
+            t.add_row([list_sorted[i][id_col], list_sorted[i][col_to_order]])
+            i+=1
+        print(t)
+    else: 
+        print("No existen datos con {} mayores a 0 para listar.".format(col_to_order)) 
 
 # Función encargada de mostrar algunas estadísticas de clientes, restaurantes y rappitenderos.
 def informes(lista_clientes, lista_restaurantes, lista_rappitenderos):
